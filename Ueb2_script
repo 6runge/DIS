@@ -90,3 +90,17 @@ CREATE TABLE contract(
 );
 
 -- populate tables
+INSERT INTO estateAgent (name, address, login, password) VALUES ('Walther Freiwald', 'Waldweg 3, 79098 Freiburg', 'walfrei', 'pw');
+INSERT INTO apartment (floor, rent, rooms, balcony, kitchen) VALUES (3, 856, 2, 0, 1);
+INSERT INTO estate (agentID, apartmentID, city, zipCode, street, streetNumber, squareArea)
+            VALUES (1, 1, 'Lopfenberg', 10203, 'Klopfergasse', 12, 63);
+INSERT INTO apartment (floor, rent, rooms, balcony, kitchen) VALUES (-1, 423, 1, 0, 0);
+INSERT INTO estate (agentID, apartmentID, city, zipCode, street, streetNumber, squareArea)
+            VALUES (1, 2, 'Hopfenhausen', 56099, 'Braustieg', 23, 11);
+INSERT INTO house (floors, price, garden) VALUES (2, 564000, 1);
+INSERT INTO estate (agentID, houseID, city, zipCode, street, streetNumber, squareArea)
+            VALUES (1, 1, 'Hageln', 33541, 'Harzweg', 7, 156);
+INSERT INTO person(fName, lName, address) VALUES ('Westrupp', 'Walter', '45128 Essen');
+INSERT INTO person(fName, lName, address) VALUES ('Dampf', 'Hans', '20254 Hamburg');
+--INSERT INTO tenancyContract (startDate, endDate, additionalCost) VALUES ('
+

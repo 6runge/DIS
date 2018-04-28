@@ -61,17 +61,25 @@ CREATE TABLE person(
 
 CREATE TABLE contract(
     contractNo INTEGER AS IDENTITY PRIMARY KEY NOT NULL UNIQUE,
+    tenancyContractID AS FOREIGN KEY REFERENCES tenancyContract(tenancyContractID),
+    purchaseContractID AS FOREIGN KEY REFERENCES purchaseContract(purchaseContractID),
     date DATE,
     place VARCHAR(500),
+    check ((tenancyContractID IS NULL OR purchaseContractID is NULL) AND NOT
+           (tenancyContractID IS NULL AND purchaseContractID is NULL))
 );
 
 CREATE TABLE tenancyContract(
+    tenancyContractID INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL UNIQUE,
+    contractNo INTEGER AS FOREIGN KEY REFERENCES contract(contractNo) NOT NULL,
     startDate date,
     endDate date,
     additionalCost INTEGER
 );
 
 CREATE TABLE purchaseContract(
+    purchaseContractID INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL UNIQUE,
+    contractNo INTEGER AS FOREIGN KEY REFERENCES contract(contractNo) NOT NULL,
     NoOfInstallments INTEGER,
     interestRate INTEGER
 );

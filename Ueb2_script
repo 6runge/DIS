@@ -1,13 +1,12 @@
 -- clean-up
 DROP TABLE estateAgent;
-DROP TABLE estate;
 DROP TABLE apartment;
 DROP TABLE house;
+DROP TABLE estate;
 DROP TABLE person;
-DROP TABLE contract;
 DROP TABLE tenancyContract;
 DROP TABLE purchaseContract;
-
+DROP TABLE contract;
 
 -- create tables
 CREATE TABLE estateAgent(
@@ -15,63 +14,57 @@ CREATE TABLE estateAgent(
     name VARCHAR(255),
     address VARCHAR(500),
     login VARCHAR(255) NOT NULL UNIQUE,
-    password VARCHAR(256) NOT NULL,
+    password VARCHAR(256) NOT NULL
 );
 
-CREATE TABLE estate(
-    estateID INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL UNIQUE,
-    agentID INTEGER AS FOREIGN KEY REFERENCES estateAgent(agentID) NOT NULL,
-    apartmentID INTEGER AS FOREIGN KEY REFERENCES apartment(apartmentID),
-    houseID INTEGER AS FOREIGN KEY REFERENCES house(houseID),
-    city VARCHAR(255),
-    zipCode INTEGER,
-    street VARCHAR(255),
-    streetNumber INTEGER,
-    squareArea INTEGER,
-    check ((houseID IS NULL OR apartmentID is NULL) AND NOT
-           (houseID IS NULL AND apartmentID is NULL))  
-);
 
 CREATE TABLE apartment(
     apartmentID INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL UNIQUE,
-    estateID INTEGER AS FOREIGN KEY REFERENCES estate(estateID) NOT NULL,
     floor INTEGER,
     rent INTEGER,
     rooms INTEGER,
     balcony INTEGER,
     kitchen INTEGER,
-    CHECK balcony in (0,1),
-    CHECK kitchen in (0,1)
+    CHECK (balcony = 0 or balcony = 1),
+    CHECK (kitchen = 0 or kitchen = 1)
 );
 
 CREATE TABLE house(
     houseID INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL UNIQUE,
-    estateID INTEGER AS FOREIGN KEY REFERENCES estate(estateID) NOT NULL,
     floors INTEGER,
     price INTEGER,
     garden INTEGER,
-    CHECK kitchen in (0,1)
+    CHECK (garden = 0 or garden = 1)
 );
+
+CREATE TABLE estate(
+    estateID INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL UNIQUE,
+    agentID INTEGER NOT NULL,
+    apartmentID INTEGER,
+    houseID INTEGER,
+    city VARCHAR(255),
+    zipCode INTEGER,
+    street VARCHAR(255),
+    streetNumber INTEGER,
+    squareArea INTEGER,    
+    FOREIGN KEY (agentID) REFERENCES estateAgent(agentID),
+    FOREIGN KEY (apartmentID) REFERENCES apartment(apartmentID),
+    FOREIGN KEY (houseID) REFERENCES house(houseID),
+    -- each estate is either a house or an apartment:
+    check ((houseID IS NULL OR apartmentID is NULL) AND NOT
+           (houseID IS NULL AND apartmentID is NULL))  
+);
+
 
 CREATE TABLE person(
+    personID INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL UNIQUE,
     fName VARCHAR(255),
-    name VARCHAR(255),
+    lName VARCHAR(255),
     address VARCHAR (500)
-);
-
-CREATE TABLE contract(
-    contractNo INTEGER AS IDENTITY PRIMARY KEY NOT NULL UNIQUE,
-    tenancyContractID AS FOREIGN KEY REFERENCES tenancyContract(tenancyContractID),
-    purchaseContractID AS FOREIGN KEY REFERENCES purchaseContract(purchaseContractID),
-    date DATE,
-    place VARCHAR(500),
-    check ((tenancyContractID IS NULL OR purchaseContractID is NULL) AND NOT
-           (tenancyContractID IS NULL AND purchaseContractID is NULL))
 );
 
 CREATE TABLE tenancyContract(
     tenancyContractID INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL UNIQUE,
-    contractNo INTEGER AS FOREIGN KEY REFERENCES contract(contractNo) NOT NULL,
     startDate date,
     endDate date,
     additionalCost INTEGER
@@ -79,10 +72,21 @@ CREATE TABLE tenancyContract(
 
 CREATE TABLE purchaseContract(
     purchaseContractID INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL UNIQUE,
-    contractNo INTEGER AS FOREIGN KEY REFERENCES contract(contractNo) NOT NULL,
     NoOfInstallments INTEGER,
     interestRate INTEGER
 );
 
+CREATE TABLE contract(
+    contractNo INTEGER PRIMARY KEY NOT NULL UNIQUE,
+    tenancyContractID INTEGER,
+    purchaseContractID INTEGER,
+    date DATE,
+    place VARCHAR(500),
+    FOREIGN KEY (tenancyContractID) REFERENCES tenancyContract(tenancyContractID),
+    FOREIGN KEY (purchaseContractID) REFERENCES purchaseContract(purchaseContractID),
+    -- each conract is either a tenancy- or purchase contract:
+    check ((tenancyContractID IS NULL OR purchaseContractID is NULL) AND NOT
+           (tenancyContractID IS NULL AND purchaseContractID is NULL))
+);
 
 -- populate tables

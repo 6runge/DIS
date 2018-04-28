@@ -1,0 +1,80 @@
+-- clean-up
+DROP TABLE estateAgent;
+DROP TABLE estate;
+DROP TABLE apartment;
+DROP TABLE house;
+DROP TABLE person;
+DROP TABLE contract;
+DROP TABLE tenancyContract;
+DROP TABLE purchaseContract;
+
+
+-- create tables
+CREATE TABLE estateAgent(
+    agentID INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL UNIQUE,
+    name VARCHAR(255),
+    address VARCHAR(500),
+    login VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(256) NOT NULL,
+);
+
+CREATE TABLE estate(
+    estateID INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL UNIQUE,
+    agentID INTEGER AS FOREIGN KEY REFERENCES estateAgent(agentID) NOT NULL,
+    apartmentID INTEGER AS FOREIGN KEY REFERENCES apartment(apartmentID),
+    houseID INTEGER AS FOREIGN KEY REFERENCES house(houseID),
+    city VARCHAR(255),
+    zipCode INTEGER,
+    street VARCHAR(255),
+    streetNumber INTEGER,
+    squareArea INTEGER,
+    check ((houseID IS NULL OR apartmentID is NULL) AND NOT
+           (houseID IS NULL AND apartmentID is NULL))  
+);
+
+CREATE TABLE apartment(
+    apartmentID INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL UNIQUE,
+    estateID INTEGER AS FOREIGN KEY REFERENCES estate(estateID) NOT NULL,
+    floor INTEGER,
+    rent INTEGER,
+    rooms INTEGER,
+    balcony INTEGER,
+    kitchen INTEGER,
+    CHECK balcony in (0,1),
+    CHECK kitchen in (0,1)
+);
+
+CREATE TABLE house(
+    houseID INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL UNIQUE,
+    estateID INTEGER AS FOREIGN KEY REFERENCES estate(estateID) NOT NULL,
+    floors INTEGER,
+    price INTEGER,
+    garden INTEGER,
+    CHECK kitchen in (0,1)
+);
+
+CREATE TABLE person(
+    fName VARCHAR(255),
+    name VARCHAR(255),
+    address VARCHAR (500)
+);
+
+CREATE TABLE contract(
+    contractNo INTEGER AS IDENTITY PRIMARY KEY NOT NULL UNIQUE,
+    date DATE,
+    place VARCHAR(500),
+);
+
+CREATE TABLE tenancyContract(
+    startDate date,
+    endDate date,
+    additionalCost INTEGER
+);
+
+CREATE TABLE purchaseContract(
+    NoOfInstallments INTEGER,
+    interestRate INTEGER
+);
+
+
+-- populate tables

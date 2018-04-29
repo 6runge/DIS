@@ -65,15 +65,23 @@ CREATE TABLE person(
 
 CREATE TABLE tenancyContract(
     tenancyContractID INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL UNIQUE,
+    apartmentID INTEGER,
+    tenantID INTEGER,
     startDate date,
-    endDate date,
-    additionalCost INTEGER
+    duration INTEGER,
+    additionalCost INTEGER,
+    FOREIGN KEY (apartmentID) REFERENCES apartment(apartmentID),
+    FOREIGN KEY (tenantID) REFERENCES person(personID)
 );
 
 CREATE TABLE purchaseContract(
     purchaseContractID INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL UNIQUE,
+    houseID INTEGER,
+    buyerID INTEGER,
     NoOfInstallments INTEGER,
-    interestRate INTEGER
+    interestRate INTEGER,
+    FOREIGN KEY (houseID) REFERENCES apartment(apartmentID),
+    FOREIGN KEY (buyerID) REFERENCES person(personID)
 );
 
 CREATE TABLE contract(
@@ -90,17 +98,29 @@ CREATE TABLE contract(
 );
 
 -- populate tables
-INSERT INTO estateAgent (name, address, login, password) VALUES ('Walther Freiwald', 'Waldweg 3, 79098 Freiburg', 'walfrei', 'pw');
-INSERT INTO apartment (floor, rent, rooms, balcony, kitchen) VALUES (3, 856, 2, 0, 1);
+INSERT INTO estateAgent (name, address, login, password) 
+            VALUES ('Walter Freiwald', 'Waldweg 3, 79098 Freiburg', 'walfrei', 'pw');
+INSERT INTO apartment (floor, rent, rooms, balcony, kitchen) 
+            VALUES (3, 856, 2, 0, 1);
 INSERT INTO estate (agentID, apartmentID, city, zipCode, street, streetNumber, squareArea)
             VALUES (1, 1, 'Lopfenberg', 10203, 'Klopfergasse', 12, 63);
-INSERT INTO apartment (floor, rent, rooms, balcony, kitchen) VALUES (-1, 423, 1, 0, 0);
+INSERT INTO apartment (floor, rent, rooms, balcony, kitchen) 
+            VALUES (-1, 423, 1, 0, 0);
 INSERT INTO estate (agentID, apartmentID, city, zipCode, street, streetNumber, squareArea)
             VALUES (1, 2, 'Hopfenhausen', 56099, 'Braustieg', 23, 11);
-INSERT INTO house (floors, price, garden) VALUES (2, 564000, 1);
+INSERT INTO house (floors, price, garden) 
+            VALUES (2, 564000, 1);
 INSERT INTO estate (agentID, houseID, city, zipCode, street, streetNumber, squareArea)
             VALUES (1, 1, 'Hageln', 33541, 'Harzweg', 7, 156);
-INSERT INTO person(fName, lName, address) VALUES ('Westrupp', 'Walter', '45128 Essen');
-INSERT INTO person(fName, lName, address) VALUES ('Dampf', 'Hans', '20254 Hamburg');
---INSERT INTO tenancyContract (startDate, endDate, additionalCost) VALUES ('
-
+INSERT INTO person (fName, lName, address) 
+            VALUES ('Westrupp', 'Walter', '45128 Essen');
+INSERT INTO person (fName, lName, address) 
+            VALUES ('Dampf', 'Hans', '20254 Hamburg');
+INSERT INTO tenancyContract (apartmentID, tenantID, startDate, duration, additionalCost) 
+            VALUES (2, 1, '1992-05-01', 360, 43);
+INSERT INTO contract (contractNo, tenancyContractID, date, place)
+            VALUES (23, 1, '1992-03-22', 'Essen');
+INSERT INTO purchaseContract (houseID, buyerID, NoOfInstallments, interestRate)
+            VALUES (1, 2, 24, 1235);
+INSERT INTO contract (contractNo, purchaseContractID, date, place)
+            VALUES (54, 1, '2013-11-11', 'Bad Oldesoe');

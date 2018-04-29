@@ -368,6 +368,7 @@ public class Main {
 	 * die entprechenden Daten eingegeben hat.
 	 */
 	public static void newEstate() {
+		String idGetterHelper = "ApartmentId";
 		String type = FormUtil.readString("(H)ouse or (A)ppartment?").toLowerCase();
 		while (!(type.equals("h") || type.equals("a")) ) {
 			System.out.println("Falsche Eingabe!");
@@ -376,7 +377,7 @@ public class Main {
 		Estate estate;
 		if (type.equals("h")) {
 			estate = new House();
-		
+			idGetterHelper = "HouseId";
 		} else {
 			estate = new Appartment();
 		}
@@ -384,7 +385,10 @@ public class Main {
 		estate.read();
 		estate.save();
 
-		System.out.println("Estate mit der ID "+estate.getId()+" wurde erzeugt.");
+		int eId = -1;
+		DomainRepository repo = new DomainRepository();
+		eId = repo.findIdByForeignId("estate",idGetterHelper,estate.getId());
+		System.out.println("Estate mit der ID "+eId+" wurde erzeugt.");
 	}
 	public static void updateEstate(int id){
 		Estate estate = Estate.load(id);

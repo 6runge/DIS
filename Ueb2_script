@@ -10,7 +10,7 @@ DROP TABLE contract;
 
 -- create tables
 CREATE TABLE estateAgent(
-    agentID INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL UNIQUE,
+    ID INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL UNIQUE,
     name VARCHAR(255),
     address VARCHAR(500),
     login VARCHAR(255) NOT NULL UNIQUE,
@@ -19,7 +19,7 @@ CREATE TABLE estateAgent(
 
 
 CREATE TABLE apartment(
-    apartmentID INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL UNIQUE,
+    ID INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL UNIQUE,
     floor INTEGER,
     rent INTEGER,
     rooms INTEGER,
@@ -30,7 +30,7 @@ CREATE TABLE apartment(
 );
 
 CREATE TABLE house(
-    houseID INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL UNIQUE,
+    ID INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL UNIQUE,
     floors INTEGER,
     price INTEGER,
     garden INTEGER,
@@ -38,7 +38,7 @@ CREATE TABLE house(
 );
 
 CREATE TABLE estate(
-    estateID INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL UNIQUE,
+    ID INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL UNIQUE,
     agentID INTEGER NOT NULL,
     apartmentID INTEGER,
     houseID INTEGER,
@@ -47,9 +47,9 @@ CREATE TABLE estate(
     street VARCHAR(255),
     streetNumber INTEGER,
     squareArea INTEGER,    
-    FOREIGN KEY (agentID) REFERENCES estateAgent(agentID),
-    FOREIGN KEY (apartmentID) REFERENCES apartment(apartmentID),
-    FOREIGN KEY (houseID) REFERENCES house(houseID),
+    FOREIGN KEY (agentID) REFERENCES estateAgent(ID),
+    FOREIGN KEY (apartmentID) REFERENCES apartment(ID),
+    FOREIGN KEY (houseID) REFERENCES house(ID),
     -- each estate is either a house or an apartment:
     check ((houseID IS NULL OR apartmentID is NULL) AND NOT
            (houseID IS NULL AND apartmentID is NULL))  
@@ -57,41 +57,42 @@ CREATE TABLE estate(
 
 
 CREATE TABLE person(
-    personID INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL UNIQUE,
+    ID INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL UNIQUE,
     fName VARCHAR(255),
     lName VARCHAR(255),
     address VARCHAR (500)
 );
 
 CREATE TABLE tenancyContract(
-    tenancyContractID INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL UNIQUE,
+    ID INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL UNIQUE,
     apartmentID INTEGER,
     tenantID INTEGER,
     startDate date,
     duration INTEGER,
     additionalCost INTEGER,
-    FOREIGN KEY (apartmentID) REFERENCES apartment(apartmentID),
-    FOREIGN KEY (tenantID) REFERENCES person(personID)
+    FOREIGN KEY (apartmentID) REFERENCES apartment(ID),
+    FOREIGN KEY (tenantID) REFERENCES person(ID)
 );
 
 CREATE TABLE purchaseContract(
-    purchaseContractID INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL UNIQUE,
+    ID INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL UNIQUE,
     houseID INTEGER,
     buyerID INTEGER,
     NoOfInstallments INTEGER,
     interestRate INTEGER,
-    FOREIGN KEY (houseID) REFERENCES apartment(apartmentID),
-    FOREIGN KEY (buyerID) REFERENCES person(personID)
+    FOREIGN KEY (houseID) REFERENCES apartment(ID),
+    FOREIGN KEY (buyerID) REFERENCES person(ID)
 );
 
 CREATE TABLE contract(
-    contractNo INTEGER PRIMARY KEY NOT NULL UNIQUE,
+    ID INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY NOT NULL UNIQUE,
+    contractNo INTEGER,
     tenancyContractID INTEGER,
     purchaseContractID INTEGER,
     date DATE,
     place VARCHAR(500),
-    FOREIGN KEY (tenancyContractID) REFERENCES tenancyContract(tenancyContractID),
-    FOREIGN KEY (purchaseContractID) REFERENCES purchaseContract(purchaseContractID),
+    FOREIGN KEY (tenancyContractID) REFERENCES tenancyContract(ID),
+    FOREIGN KEY (purchaseContractID) REFERENCES purchaseContract(ID),
     -- each conract is either a tenancy- or purchase contract:
     check ((tenancyContractID IS NULL OR purchaseContractID is NULL) AND NOT
            (tenancyContractID IS NULL AND purchaseContractID is NULL))

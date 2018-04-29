@@ -101,6 +101,8 @@ CREATE TABLE contract(
 -- populate tables
 INSERT INTO estateAgent (name, address, login, password) 
             VALUES ('Walter Freiwald', 'Waldweg 3, 79098 Freiburg', 'walfrei', 'pw');
+INSERT INTO estateAgent (name, address, login, password) 
+            VALUES ('Tester McTippnichsoviel', 'Rhoda Drive 288, 17601 Lancaster, PA', 'q', 'q');
 INSERT INTO apartment (floor, rent, rooms, balcony, kitchen) 
             VALUES (3, 856, 2, 0, 1);
 INSERT INTO estate (agentID, apartmentID, city, zipCode, street, streetNumber, squareArea)

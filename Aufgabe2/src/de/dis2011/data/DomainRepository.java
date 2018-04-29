@@ -147,4 +147,26 @@ public class DomainRepository {
 		}
 		
 	}
+
+	public int findIdByForeignId(String table, String foreignField, int id) {
+		try {
+			// Hole Verbindung
+			Connection con = DB2ConnectionManager.getInstance().getConnection();
+
+			// Erzeuge Anfrage
+			String selectSQL = "SELECT id FROM "+table+" WHERE "+foreignField+" = ?";
+			PreparedStatement pstmt = con.prepareStatement(selectSQL);
+			pstmt.setInt(1, id);
+			// Führe Anfrage aus
+			ResultSet rs = pstmt.executeQuery();	
+			if (rs.next()) {
+				return rs.getInt(1);
+			} else {
+				return 0;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}		
+		return 0;
+	}
 }

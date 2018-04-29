@@ -11,7 +11,6 @@ import java.util.Map;
 
 public class DomainRepository {
 
-
 	private int id = -1;
 	
 	public int getId() {
@@ -21,16 +20,13 @@ public class DomainRepository {
 	public void setId(int id) {
 		this.id = id;
 	}
-	
-
-	
 
 	/**
 	 * Lädt einen Datensatz aus der Datenbank
 	 * @param id ID des zu ladenden Objects
 	 * @return Daten
 	 */
-	public static Map<String,Object> load(String table,String idField, int id) {
+	public Map<String,Object> load(String table,String idField, int id) {
 		try {
 			// Hole Verbindung
 			Connection con = DB2ConnectionManager.getInstance().getConnection();
@@ -65,7 +61,7 @@ public class DomainRepository {
 	 * Speichert einen Datensatz in der Datenbank. Ist noch keine ID vergeben
 	 * worden, wird die generierte Id von DB2 geholt und dem Model übergeben.
 	 */
-	public int save(String table, int id, Map<String,Object> keysVals ) {
+	public int save(String table, String idField, int id, Map<String,Object> keysVals ) {
 		// Hole Verbindung
 		Connection con = DB2ConnectionManager.getInstance().getConnection();
 
@@ -111,7 +107,7 @@ public class DomainRepository {
 					keysWithMarks += entry.getKey() + " = ?,";
 				}
 				keysWithMarks = keysWithMarks.substring(0,keysWithMarks.length() -1);
-				String updateSQL = "UPDATE "+table+" SET "+keysWithMarks+" WHERE id = ?";
+				String updateSQL = "UPDATE "+table+" SET "+keysWithMarks+" WHERE " + idField + " = ?";
 				PreparedStatement pstmt = con.prepareStatement(updateSQL);
 
 				// Setze Anfrage Parameter
@@ -133,5 +129,22 @@ public class DomainRepository {
 			e.printStackTrace();
 		}
 		return id;
+	}
+	public void delete(String table, String idField, int id) {
+		try {
+			// Hole Verbindung
+			Connection con = DB2ConnectionManager.getInstance().getConnection();
+
+			// Erzeuge Anfrage
+			String selectSQL = "DELETE FROM "+table+" WHERE "+idField+" = ?";
+			PreparedStatement pstmt = con.prepareStatement(selectSQL);
+			pstmt.setInt(1, id);
+			// Führe Anfrage aus
+			pstmt.executeUpdate();	
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
 	}
 }

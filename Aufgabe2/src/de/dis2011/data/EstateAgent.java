@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.dis2011.FormUtil;
 import de.dis2011.data.DB2ConnectionManager;
 
 /**
@@ -73,7 +74,8 @@ public class EstateAgent {
 	 * @return Makler-Instanz
 	 */
 	public static EstateAgent load(int id) {
-			Map<String,Object> result = DomainRepository.load("estateagent", "AgentId",id);
+			DomainRepository repo = new DomainRepository();
+			Map<String,Object> result = repo.load("estateagent", "Id",id);
 			if (result != null) {
 				EstateAgent ts = new EstateAgent();
 				ts.setId(id);
@@ -97,6 +99,27 @@ public class EstateAgent {
 		keysVals.put("address", getAddress());
 		keysVals.put("login", getLogin());
 		keysVals.put("password", getPassword());
-		id = repo.save("estateagent",getId(),keysVals);
+		id = repo.save("estateagent","Id",getId(),keysVals);
+	}
+	
+	public void show() {
+		System.out.println("Makler mit der ID "+id+":");
+		System.out.println("Name: " + getName());
+		System.out.println("Adresse: " + getAddress());
+		System.out.println("Login: " + getLogin());
+		System.out.println("Passwort: " + getPassword());
+	}
+	
+	public void read() {
+		setName(FormUtil.readString("Name"));
+		setAddress(FormUtil.readString("Adresse"));
+		setLogin(FormUtil.readString("Login"));
+		setPassword(FormUtil.readString("Passwort"));
+	}
+
+	public void delete() {
+		DomainRepository repo = new DomainRepository();
+		repo.delete("estateagent", "Id", id);
+		
 	}
 }

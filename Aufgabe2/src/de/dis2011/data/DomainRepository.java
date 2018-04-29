@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -124,8 +125,15 @@ public class DomainRepository {
 					if (entry.getValue() instanceof String) {
 						pstmt.setString(i,(String) entry.getValue() );
 					} else if (entry.getValue() instanceof Integer) {
-						pstmt.setInt(i,(Integer) entry.getValue());
+						if (entry.getValue() == null) {
+							pstmt.setNull(i, Types.INTEGER);
+						} else {
+							pstmt.setInt(i,(Integer) entry.getValue());
+						}
+					} else {
+						pstmt.setNull(i, Types.INTEGER);
 					}
+					System.out.println(entry.toString());
 					i++;
 				}
 				pstmt.executeUpdate();

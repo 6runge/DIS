@@ -61,26 +61,31 @@ public class House extends Estate {
 	 * worden, wird die generierte Id von DB2 geholt und dem Model übergeben.
 	 */
 	public void save() {
+		
 		DomainRepository repo = new DomainRepository();
 		HashMap<String,Object> keysVals = new HashMap<String,Object>();
 		keysVals.put("floors",getFloors());
 		keysVals.put("price",getPrice()); 
 		keysVals.put("garden",isGarden()?1:0);
-		Estate estate;
+
+		int estateId = 0;
 		int houseId = getId();
 		if (houseId != -1) {
-			int estateId = repo.findIdByForeignId("estate","HouseId",houseId); 
-			estate = Estate.load(estateId);
-			if (estate == null) {
+			estateId = repo.findIdByForeignId("estate","HouseId",houseId); 
+			if (estateId == 0) {
 				System.out.println("Domain Model incoherent. Missing EstateRecord(parent) for HouseID: "+houseId);
 				return;
-			}
-			estate.setId(estateId);			
+			}		
 		} else {
-			estate = new Estate();
+			estateId = -1; 
+		
 		}
-		estate.save();
-		setId(repo.save("house","Id",houseId,keysVals));
+		houseId = repo.save("house","Id",houseId,keysVals);
+		setId(estateId);
+		setHouseId(houseId);
+		super.save();
+		setId(houseId);
+		
 		
 	}
 	
@@ -98,7 +103,6 @@ public class House extends Estate {
 		setFloors(FormUtil.readInt("floors"));
 		setPrice(FormUtil.readInt("price"));
 		setGarden(FormUtil.readString("garden (y/n)").toLowerCase() == "y"); 
-
 	}
 
 	public void delete() {
@@ -107,12 +111,6 @@ public class House extends Estate {
 		int estateId = repo.findIdByForeignId("estate","HouseId",getId());
 		repo.delete("estate", "Id", estateId);
 		
-	}
-
-	
-	
-	public House() {
-		// TODO Auto-generated constructor stub
 	}
 
 }

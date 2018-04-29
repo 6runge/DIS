@@ -8,9 +8,9 @@ import de.dis2011.FormUtil;
 public class Estate {
 	private int id = -1;
 
-	private int agentId;
-	private int apartmentId; 
-	private int houseId;
+	private Integer agentId;
+	private Integer apartmentId; 
+	private Integer houseId;
 	private String city;
 	private int zipCode;
 	private String street;
@@ -33,7 +33,7 @@ public class Estate {
 		this.agentId = agentId;
 	}
 
-	public int getApartmentId() {
+	public Integer getApartmentId() {
 		return apartmentId;
 	}
 
@@ -123,13 +123,13 @@ public class Estate {
 		DomainRepository repo = new DomainRepository();
 		HashMap<String,Object> keysVals = new HashMap<String,Object>();
 		keysVals.put("agentId",getAgentId());
-		keysVals.put("apartmentId",getApartmentId()); 
+		keysVals.put("apartmentId",getApartmentId());
 		keysVals.put("houseId",getHouseId());
 		keysVals.put("city",getCity());
 		keysVals.put("zipCode",getZipCode());
 		keysVals.put("street",getStreet());
 		keysVals.put("streetNumber",getStreetNumber());
-		keysVals.put("squareArea",getSquareArea());			
+		keysVals.put("squareArea",getSquareArea());	
 		id = repo.save("estate","Id",getId(),keysVals);
 	}
 	

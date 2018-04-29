@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
+import java.util.Map;
 
 import de.dis2011.data.DB2ConnectionManager;
 
@@ -72,22 +73,15 @@ public class EstateAgent {
 	 * @return Makler-Instanz
 	 */
 	public static EstateAgent load(int id) {
-			ResultSet rs = DomainRepository.load("estateagent", id);
-			try {
-				if (rs.next()) {
-					EstateAgent ts = new EstateAgent();
-					ts.setId(id);
-					ts.setName(rs.getString("name"));
-					ts.setAddress(rs.getString("address"));
-					ts.setLogin(rs.getString("login"));
-					ts.setPassword(rs.getString("password"));
-
-					rs.close();
-					return ts;
-				}
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			Map<String,Object> result = DomainRepository.load("estateagent", "AgentId",id);
+			if (result != null) {
+				EstateAgent ts = new EstateAgent();
+				ts.setId(id);
+				ts.setName((String) result.get("name"));
+				ts.setAddress((String) result.get("address"));
+				ts.setLogin((String) result.get("login"));
+				ts.setPassword((String) result.get("password"));
+				return ts;
 			}
 			return null;
 	}

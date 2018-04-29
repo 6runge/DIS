@@ -46,11 +46,13 @@ public class Main {
 	
 	/**
 	 * Zeigt die Maklerverwaltung
+	 * @throws NumberFormatException 
 	 */
-	public static void showMaklerMenu() {
+	public static void showMaklerMenu() throws NumberFormatException {
 		//Menüoptionen
 		final int NEW_MAKLER = 0;
-		final int BACK = 1;
+		final int SHOW_MAKLER = 1;
+		final int BACK = 2;
 		System.out.print("Password? ");
 		BufferedReader stdin = new BufferedReader(new InputStreamReader(System.in));
 		
@@ -67,6 +69,7 @@ public class Main {
 		//Maklerverwaltungsmenü
 		Menu maklerMenu = new Menu("Makler-Verwaltung");
 		maklerMenu.addEntry("Neuer Makler", NEW_MAKLER);
+		maklerMenu.addEntry("Zeige Makler", SHOW_MAKLER);
 		maklerMenu.addEntry("Zurück zum Hauptmenü", BACK);
 		
 		//Verarbeite Eingabe
@@ -77,6 +80,15 @@ public class Main {
 				case NEW_MAKLER:
 					newMakler();
 					break;
+				case SHOW_MAKLER:
+					System.out.print("Estate Agent Id? ");
+					try {
+						int id = Integer.parseInt(stdin.readLine());
+						showMakler(id);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				case BACK:
 					return;
 			}
@@ -97,5 +109,21 @@ public class Main {
 		m.save();
 		
 		System.out.println("Makler mit der ID "+m.getId()+" wurde erzeugt.");
+	}
+	
+	public static void showMakler(int id) {
+		EstateAgent agent = EstateAgent.load(id);
+		
+		if (agent == null) {
+			System.out.println("Makler mit der ID "+id+" existiert nicht oder konnte nicht geladen werden.");
+			return;
+		}
+		System.out.println("Makler mit der ID "+id+":");
+		System.out.println("Name: "+agent.getName());
+		System.out.println("Adresse: "+agent.getAddress());
+		System.out.println("Login: " + agent.getLogin());
+		System.out.println("Passwort: "+agent.getPassword());
+		
+		
 	}
 }

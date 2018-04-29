@@ -110,10 +110,9 @@ public class House extends Estate {
 
 	public void delete() {
 		DomainRepository repo = new DomainRepository();
-		repo.delete("house", "Id", getId());
 		int estateId = repo.findIdByForeignId("estate","HouseId",getId());
 		repo.delete("estate", "Id", estateId);
-		
+		repo.delete("house", "Id", getId());		
 	}
 
 }

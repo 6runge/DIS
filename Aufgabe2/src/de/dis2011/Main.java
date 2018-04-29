@@ -290,6 +290,7 @@ public class Main {
 		if(!pwin.equals(makler.getPassword())) {
 			System.out.println("");
 			System.out.println("Falsches Passwort, du Trottel!");
+			return;
 		}
 		// For debugs
 	//	makler = EstateAgent.load(1);
@@ -345,18 +346,17 @@ public class Main {
 	private static void deleteEstate(int id) {
 		Estate estate = Estate.load(id);
 		if (estate == null) {
-			System.out.println("Makler mit der ID "+id+" existiert nicht oder konnte nicht geladen werden.");
+			System.out.println("Immobilie mit der ID "+id+" existiert nicht oder konnte nicht geladen werden.");
 			return;
 		}
-		if (estate.getHouseId() != 0) {
+		if (estate.getHouseId() != null) {
 			estate = House.load(estate.getHouseId());
-		} else if (estate.getApartmentId() != 0) {
+		} else if (estate.getApartmentId() != null) {
 			estate = Appartment.load(estate.getApartmentId());
 		}		
 		estate.show();
 		
-		System.out.print("Makler löschen? ");
-		String str = FormUtil.readString("Makler löschen? (y/n) ");
+		String str = FormUtil.readString("Immobilie löschen? (y/n) ");
 		if (str.toLowerCase().equals("y")) {
 
 			estate.delete();
@@ -364,7 +364,7 @@ public class Main {
 	}
 
 	/**
-	 * Legt einen neuen Makler an, nachdem der Benutzer
+	 * Legt eine neue Immobilie an, nachdem der Benutzer
 	 * die entprechenden Daten eingegeben hat.
 	 */
 	public static void newEstate() {

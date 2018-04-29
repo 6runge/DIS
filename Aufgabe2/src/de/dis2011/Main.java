@@ -3,12 +3,15 @@ package de.dis2011;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
 
 import de.dis2011.data.Appartment;
+import de.dis2011.data.Contract;
 import de.dis2011.data.DomainRepository;
 import de.dis2011.data.Estate;
 import de.dis2011.data.EstateAgent;
 import de.dis2011.data.House;
+import de.dis2011.data.Person;
 
 /**
  * Hauptklasse
@@ -29,12 +32,14 @@ public class Main {
 		//Menüoptionen
 		final int MENU_MAKLER = 0;
 		final int MENU_ESTATE = 1;
-		final int QUIT = 2;
+		final int MENU_CONTRACT = 2;
+		final int QUIT = 3;
 
 		//Erzeuge Menü
 		Menu mainMenu = new Menu("Hauptmenü");
 		mainMenu.addEntry("Makler-Verwaltung", MENU_MAKLER);
 		mainMenu.addEntry("Immobilienverwaltung", MENU_ESTATE);
+		mainMenu.addEntry("Vertragsverwaltung", MENU_CONTRACT);
 		mainMenu.addEntry("Beenden", QUIT);
 
 		//Verarbeite Eingabe
@@ -48,6 +53,9 @@ public class Main {
 			case MENU_ESTATE:
 				showEstateMenu();
 				break;
+			case MENU_CONTRACT:
+				showContractMenu();
+				break;								
 			case QUIT:
 				return;
 			}
@@ -91,17 +99,31 @@ public class Main {
 	}
 
 	private static void showContracts() {
-		// TODO Auto-generated method stub
-		
+
+		List<Contract> contracts;
+		contracts = Contract.loadAll();
+		for (Contract contract : contracts) {
+			contract.show();
+		}
 	}
 
 	private static void newContract() {
-		// TODO Auto-generated method stub
+		Contract contract = new Contract();
+
+		contract.read();
+		contract.save();
+
+		System.out.println("Vertrag mit der ID "+contract.getId()+" wurde erzeugt.");
 		
 	}
 
 	private static void newPerson() {
-		// TODO Auto-generated method stub
+		Person person = new Person();
+
+		person.read();
+		person.save();
+
+		System.out.println("PErson mit der ID "+person.getId()+" wurde erzeugt.");
 		
 	}
 

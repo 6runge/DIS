@@ -8,6 +8,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 public class DomainRepository {
@@ -210,5 +212,48 @@ public class DomainRepository {
 			e.printStackTrace();
 		}		
 		return 0;
+	}
+
+	public List<HashMap<String,Object>> loadAll(String table) {
+		try {
+			// Hole Verbindung
+			Connection con = DB2ConnectionManager.getInstance().getConnection();
+
+			// Erzeuge Anfrage
+			String selectSQL = "SELECT * FROM "+table;
+			PreparedStatement pstmt = con.prepareStatement(selectSQL);
+						// Führe Anfrage aus
+			ResultSet rs = pstmt.executeQuery();
+			ResultSetMetaData rsmd = rs.getMetaData();
+			int colCount = rsmd.getColumnCount();
+			List<HashMap<String,Object>> result = new LinkedList<HashMap<String,Object>>();
+			HashMap<String,Object> nextResult = new HashMap<String,Object>(); 
+			if (rs.next()) {
+				
+				for (int i = 1;i<= colCount; i++) {
+					String colName = rsmd.getColumnName(i);
+					nextResult.put(colName.toLowerCase(),rs.getObject(i));
+				}
+				result.add(nextResult);
+				
+			} else {
+				return null;
+			}
+			while (rs.next()) {
+				nextResult = new HashMap<String,Object>();
+				for (int i = 1;i<= colCount; i++) {
+					String colName = rsmd.getColumnName(i);
+					nextResult.put(colName.toLowerCase(),rs.getObject(i));
+				}
+				result.add(nextResult);
+			}
+			
+			pstmt.close();
+			return result;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;// TODO Auto-generated method stub
 	}
 }

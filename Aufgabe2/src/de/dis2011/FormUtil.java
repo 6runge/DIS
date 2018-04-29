@@ -3,6 +3,7 @@ package de.dis2011;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.sql.Date;
 
 /**
  * Kleine Helferklasse zum Einlesen von Formulardaten
@@ -49,4 +50,22 @@ public class FormUtil {
 		
 		return ret;
 	}
+	public static Date readDate(String label) {
+		Date ret = null;
+		boolean finished = false;
+
+		while(!finished) {
+			String line = readString(label);
+			
+			try {
+				ret = Date.valueOf(line);
+				finished = true;
+			} catch (IllegalArgumentException e) {
+				System.err.println("Ungültige Eingabe: Bitte geben Sie eine Datum im Format 'yyyy-mm-dd' an!");
+			}
+		}
+		
+		return ret;
+	}	
+	
 }

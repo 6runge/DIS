@@ -131,9 +131,10 @@ public class Appartment extends Estate {
 
 	public void delete() {
 		DomainRepository repo = new DomainRepository();
-		repo.delete("apartment", "Id", getId());
 		int estateId = repo.findIdByForeignId("estate","ApartmentId",getId());
 		repo.delete("estate", "Id", estateId);
+		repo.delete("apartment", "Id", getId());
+		
 		
 	}
 

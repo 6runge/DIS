@@ -370,9 +370,9 @@ public class Main {
 			System.out.println("Estate mit der ID "+id+" existiert nicht oder konnte nicht geladen werden.");
 			return;
 		}
-		if (estate.getHouseId() != 0) {
+		if (estate.getHouseId() != null) {
 			estate = House.load(estate.getHouseId());
-		} else if (estate.getApartmentId() != 0) {
+		} else if (estate.getApartmentId() != null) {
 			estate = Appartment.load(estate.getApartmentId());
 		}		
 		estate.show();

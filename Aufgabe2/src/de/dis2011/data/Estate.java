@@ -145,7 +145,9 @@ public class Estate {
 	
 	public void show() {
 		System.out.println("Estate mit der ID "+id+":");
-//		System.out.println("agentId: "+getAgentId());
+		EstateAgent agent = EstateAgent.load(getAgentId());
+		System.out.println("Makler: " + agent.getName());  
+		//		System.out.println("agentId: "+getAgentId());
 //		System.out.println("apartmentId: "+getApartmentId()); 
 //		System.out.println("houseId: "+getHouseId());
 		System.out.println("city: "+getCity());

@@ -1,6 +1,10 @@
 package de.dis2011;
 
-import de.dis2011.data.Makler;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+import de.dis2011.data.EstateAgent;
 
 /**
  * Hauptklasse
@@ -47,7 +51,19 @@ public class Main {
 		//Menüoptionen
 		final int NEW_MAKLER = 0;
 		final int BACK = 1;
+		System.out.print("Password? ");
+		BufferedReader stdin = new BufferedReader(new InputStreamReader(System.in));
 		
+		try {
+			if (!stdin.readLine().equals("hardcore")) {
+				System.out.println("");
+				System.out.println("Wrong password, moron!");
+				return;
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		//Maklerverwaltungsmenü
 		Menu maklerMenu = new Menu("Makler-Verwaltung");
 		maklerMenu.addEntry("Neuer Makler", NEW_MAKLER);
@@ -72,7 +88,7 @@ public class Main {
 	 * die entprechenden Daten eingegeben hat.
 	 */
 	public static void newMakler() {
-		Makler m = new Makler();
+		EstateAgent m = new EstateAgent();
 		
 		m.setName(FormUtil.readString("Name"));
 		m.setAddress(FormUtil.readString("Adresse"));

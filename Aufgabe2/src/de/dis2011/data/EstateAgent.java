@@ -89,6 +89,32 @@ public class EstateAgent {
 	}
 	
 	/**
+	 * Lädt einen Makler aus der Datenbank
+	 * @param login login des zu ladenden Maklers
+	 * @return Makler-Instanz
+	 */
+	public static EstateAgent loadByLogin(String login) {
+			DomainRepository repo = new DomainRepository();
+			Map<String,Object> result = repo.loadByString("estateagent", "login", login);
+			if (result != null) {
+				EstateAgent ts = new EstateAgent();
+				Object id = result.get("id");
+				if (id instanceof Integer) {
+					ts.setId((Integer) result.get("id"));
+				}
+				else {
+					System.out.println("The ID for agent "+login+" is of an invalid data type.");
+				}
+				ts.setName((String) result.get("name"));
+				ts.setAddress((String) result.get("address"));
+				ts.setLogin(login);
+				ts.setPassword((String) result.get("password"));
+				return ts;
+			}
+			return null;
+	}
+	
+	/**
 	 * Speichert den Makler in der Datenbank. Ist noch keine ID vergeben
 	 * worden, wird die generierte Id von DB2 geholt und dem Model übergeben.
 	 */

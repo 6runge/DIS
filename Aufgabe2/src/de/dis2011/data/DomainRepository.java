@@ -1,6 +1,7 @@
 package de.dis2011.data;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -13,16 +14,6 @@ import java.util.List;
 import java.util.Map;
 
 public class DomainRepository {
-
-	private int id = -1;
-	
-	public int getId() {
-		return id;
-	}
-	
-	public void setId(int id) {
-		this.id = id;
-	}
 
 	/**
 	 * Lädt einen Datensatz aus der Datenbank
@@ -127,7 +118,9 @@ public class DomainRepository {
 						pstmt.setString(i,(String) entry.getValue() );
 					} else if (entry.getValue() instanceof Integer) {
 						pstmt.setInt(i,(Integer) entry.getValue());
-					} else {
+					} else if (entry.getValue() instanceof Date) {
+						pstmt.setDate(i, (Date) entry.getValue());
+					}else {
 						pstmt.setNull(i, Types.INTEGER);
 					}
 					i++;
@@ -161,8 +154,7 @@ public class DomainRepository {
 					} else {
 						pstmt.setNull(i, Types.INTEGER);
 					}
-					i++;
-					System.out.println(entry);
+					i++;;
 				}
 				pstmt.setInt(i, id);
 				pstmt.executeUpdate();

@@ -12,6 +12,8 @@ import de.dis2011.data.Estate;
 import de.dis2011.data.EstateAgent;
 import de.dis2011.data.House;
 import de.dis2011.data.Person;
+import de.dis2011.data.PurchaseContract;
+import de.dis2011.data.TenancyContract;
 
 /**
  * Hauptklasse
@@ -102,14 +104,33 @@ public class Main {
 
 		List<Contract> contracts;
 		contracts = Contract.loadAll();
+		
 		for (Contract contract : contracts) {
-			contract.show();
+			Contract contractTemp = new Contract(); 
+			if (contract.getTenancyContractId() != null) {
+				contractTemp = TenancyContract.load(contract.getTenancyContractId());
+			} else if (contract.getPurchaseContractId() != null) {
+				contractTemp = PurchaseContract.load(contract.getPurchaseContractId());
+			}
+			int tempId = contractTemp.getId();
+			contractTemp.setId(contract.getId());
+			contractTemp.show();
 		}
 	}
 
 	private static void newContract() {
 		Contract contract = new Contract();
-
+		String type = FormUtil.readString("(T)enancy or (P)urchase?").toLowerCase();
+		while (!(type.equals("t") || type.equals("p")) ) {
+			System.out.println("Falsche Eingabe!");
+			type = FormUtil.readString("(T)enancy or (P)urchase?").toLowerCase();
+		}
+		if (type.equals("t")) {
+			contract = new TenancyContract();
+		
+		} else {
+			contract = new PurchaseContract();
+		}
 		contract.read();
 		contract.save();
 

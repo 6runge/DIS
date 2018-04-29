@@ -12,6 +12,8 @@ import de.dis2011.FormUtil;
 public class Contract {
 	private int id = -1;
 
+	private Integer tenancyContractId;
+	private Integer purchaseContractId;	
 	private Integer contractNo;
 	private Date date; 
 	private String place;
@@ -27,6 +29,22 @@ public class Contract {
 
 	public Integer getContractNo() {
 		return contractNo;
+	}
+
+	public Integer getTenancyContractId() {
+		return tenancyContractId;
+	}
+
+	public void setTenancyContractId(Integer tenancyContractId) {
+		this.tenancyContractId = tenancyContractId;
+	}
+
+	public Integer getPurchaseContractId() {
+		return purchaseContractId;
+	}
+
+	public void setPurchaseContractId(Integer purchaseContractId) {
+		this.purchaseContractId = purchaseContractId;
 	}
 
 	public void setContractNo(Integer contractNo) {
@@ -66,9 +84,10 @@ public class Contract {
 			if (result != null) {
 				Contract contract = new Contract();
 				contract.setId(id);
+				contract.setTenancyContractId((Integer) result.get("tenancycontractid"));
+				contract.setPurchaseContractId((Integer) result.get("purchasecontractid"));
 				contract.setContractNo((Integer) result.get("contractno"));
-				Date d = Date.valueOf((String) result.get("date"));
-				contract.setDate(d); 
+				contract.setDate((Date) result.get("date")); 
 				contract.setPlace((String) result.get("place"));
 
 				return contract;
@@ -84,18 +103,20 @@ public class Contract {
 		// TODO check for unique login
 		DomainRepository repo = new DomainRepository();
 		HashMap<String,Object> keysVals = new HashMap<String,Object>();
-		keysVals.put("contractNo",getContractNo());
+		keysVals.put("tenancyContractId",getTenancyContractId());
+		keysVals.put("purchaseContractId",getPurchaseContractId());
+		keysVals.put("contractno",getContractNo());
 		keysVals.put("date",getDate());
 		keysVals.put("place",getPlace());
 		id = repo.save("contract","Id",getId(),keysVals);
 	}
 	
 	public void show() {
-		System.out.println("Contract mit der ID "+id+":");
+		System.out.println("==== Contract mit der ID "+id+" =====================");
 		System.out.println("contractNo: "+getContractNo());
 		System.out.println("Date: "+getDate());
 		System.out.println("place: "+getPlace());
-
+		
 	}
 	
 	public void read() {
@@ -115,13 +136,15 @@ public class Contract {
 		DomainRepository repo = new DomainRepository();
 		List<Contract> result = new LinkedList<Contract>();
 		List<HashMap<String,Object>> contractData = repo.loadAll("contract");
-		for (HashMap<String,Object> contractRow: contractData) {
+		for (HashMap<String,Object> resultRow: contractData) {
 			Contract contract = new Contract();
-			contract.setId((Integer) contractRow.get("id"));
-			contract.setContractNo((Integer) contractRow.get("contractno"));
-			Date d = (Date) contractRow.get("date");
+			contract.setTenancyContractId((Integer) resultRow.get("tenancycontractid"));
+			contract.setPurchaseContractId((Integer) resultRow.get("purchasecontractid"));			
+			contract.setId((Integer) resultRow.get("id"));
+			contract.setContractNo((Integer) resultRow.get("contractno"));
+			Date d = (Date) resultRow.get("date");
 			contract.setDate(d); 
-			contract.setPlace((String) contractRow.get("place"));
+			contract.setPlace((String) resultRow.get("place"));
 			result.add(contract);
 		}
 		return result;

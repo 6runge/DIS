@@ -107,7 +107,6 @@ public class Estate {
 	public static Estate load(int id) {
 			DomainRepository repo = new DomainRepository();
 			Map<String,Object> result = repo.load("estate","Id",id);
-			System.out.println(result);
 			if (result != null) {
 				Estate estate = new Estate();
 				estate.setId(id);

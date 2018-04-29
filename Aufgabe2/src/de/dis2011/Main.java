@@ -386,14 +386,14 @@ public class Main {
 
 	public static void showEstate(int id) {
 		Estate estate = Estate.load(id);
+		if (estate == null) {
+			System.out.println("Estate mit der ID "+id+" existiert nicht oder konnte nicht geladen werden.");
+			return;
+		}
 		if (estate.getHouseId() != null) {
 			estate = House.load(estate.getHouseId());
 		} else if (estate.getApartmentId() != null) {
 			estate = Appartment.load(estate.getApartmentId());
-		}
-		if (estate == null) {
-			System.out.println("Estate mit der ID "+id+" existiert nicht oder konnte nicht geladen werden.");
-			return;
 		}
 		estate.show();
 

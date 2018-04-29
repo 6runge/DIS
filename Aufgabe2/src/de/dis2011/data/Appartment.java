@@ -60,9 +60,10 @@ public class Appartment extends Estate {
 	public static Appartment load(int id) {
 			
 			DomainRepository repo = new DomainRepository();
-			int estateId = repo.findIdByForeignId("estate","AppartmentId",id);
-			Appartment appartment = (Appartment) Estate.load(estateId);
-			Map<String,Object> result = repo.load("house", "Id",id);
+			int estateId = repo.findIdByForeignId("estate","ApartmentId",id);
+			Appartment appartment = new Appartment();
+			appartment.getEstateProperties(estateId);
+			Map<String,Object> result = repo.load("apartment", "Id",id);
 			if (result != null) {				
 				appartment.setId(id);
 				appartment.setFloor((Integer) result.get("floor"));
@@ -88,30 +89,33 @@ public class Appartment extends Estate {
 		keysVals.put("rooms",getRooms());
 		keysVals.put("balcony",isBalcony()?1:0);
 		keysVals.put("kitchen",isKitchen()?1:0);
-		Estate estate;
-		int appId = getId();
-		if (appId != -1) {
-			int estateId = repo.findIdByForeignId("estate","AppartmentId",appId); 
-			estate = Estate.load(estateId);
-			if (estate == null) {
-				System.out.println("Domain Model incoherent. Missing EstateRecord(parent) for HouseID: "+appId);
+		
+		int estateId = 0;
+		int apartmentId = getId();
+		if (apartmentId != -1) {
+			estateId = repo.findIdByForeignId("estate","ApartmentId",apartmentId); 
+			if (estateId == 0) {
+				System.out.println("Domain Model incoherent. Missing EstateRecord(parent) for AppartmentID: "+apartmentId);
 				return;
-			}
-			estate.setId(estateId);			
+			}		
 		} else {
-			estate = new Estate();
+			estateId = -1; 
+		
 		}
-		estate.save();
-		setId(repo.save("house","Id",appId,keysVals));
+		apartmentId = repo.save("apartment","Id",apartmentId,keysVals);
+		setId(estateId);
+		setApartmentId(apartmentId);
+		super.save();
+		setId(apartmentId);
 		
 	}
 	
 	public void show() {
 		super.show();
 		System.out.println("Appartment Zusatzdaten:");
-//		System.out.println("floors: "+getFloors());
-//		System.out.println("price: "+getPrice()); 
-//		System.out.println("garden: "+isGarden());
+		System.out.println("floor: "+getFloor());
+		System.out.println("rent: "+getRent()); 
+		System.out.println("balcony: "+isBalcony());
 
 	}
 	
@@ -127,8 +131,8 @@ public class Appartment extends Estate {
 
 	public void delete() {
 		DomainRepository repo = new DomainRepository();
-		repo.delete("house", "Id", getId());
-		int estateId = repo.findIdByForeignId("estate","HouseId",getId());
+		repo.delete("apartment", "Id", getId());
+		int estateId = repo.findIdByForeignId("estate","ApartmentId",getId());
 		repo.delete("estate", "Id", estateId);
 		
 	}

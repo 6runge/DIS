@@ -25,11 +25,11 @@ public class Estate {
 		this.id = id;
 	}
 	
-	public int getAgentId() {
+	public Integer getAgentId() {
 		return agentId;
 	}
 
-	public void setAgentId(int agentId) {
+	public void setAgentId(Integer agentId) {
 		this.agentId = agentId;
 	}
 
@@ -41,11 +41,11 @@ public class Estate {
 		this.apartmentId = apartmentId;
 	}
 
-	public int getHouseId() {
+	public Integer getHouseId() {
 		return houseId;
 	}
 
-	public void setHouseId(int houseId) {
+	public void setHouseId(Integer houseId) {
 		this.houseId = houseId;
 	}
 
@@ -88,7 +88,17 @@ public class Estate {
 	public void setSquareArea(int squareArea) {
 		this.squareArea = squareArea;
 	}
-
+	public void getEstateProperties(int estateId) {
+		Estate estate = Estate.load(estateId);// TODO Auto-generated method stub
+		this.setAgentId(estate.getAgentId());
+		this.setApartmentId(estate.getApartmentId());
+		this.setHouseId(estate.getHouseId());
+		this.setCity(estate.getCity());
+		this.setStreet(estate.getStreet());
+		this.setStreetNumber(estate.getStreetNumber());
+		this.setSquareArea(estate.getSquareArea());
+		this.setZipCode(estate.getZipCode());
+	}
 	/**
 	 * Lädt einen Makler aus der Datenbank
 	 * @param id ID des zu ladenden Maklers

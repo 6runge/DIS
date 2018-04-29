@@ -57,17 +57,7 @@ public class House extends Estate {
 			return null;
 	}
 	
-	private void getEstateProperties(int estateId) {
-		Estate estate = Estate.load(estateId);// TODO Auto-generated method stub
-		this.setAgentId(estate.getAgentId());
-		this.setApartmentId(estate.getApartmentId());
-		this.setHouseId(estate.getHouseId());
-		this.setCity(estate.getCity());
-		this.setStreet(estate.getStreet());
-		this.setStreetNumber(estate.getStreetNumber());
-		this.setSquareArea(estate.getSquareArea());
-		this.setZipCode(estate.getZipCode());
-	}
+
 
 	/**
 	 * Speichert den Makler in der Datenbank. Ist noch keine ID vergeben

@@ -386,9 +386,9 @@ public class Main {
 
 	public static void showEstate(int id) {
 		Estate estate = Estate.load(id);
-		if (estate.getHouseId() != 0) {
+		if (estate.getHouseId() != null) {
 			estate = House.load(estate.getHouseId());
-		} else if (estate.getApartmentId() != 0) {
+		} else if (estate.getApartmentId() != null) {
 			estate = Appartment.load(estate.getApartmentId());
 		}
 		if (estate == null) {

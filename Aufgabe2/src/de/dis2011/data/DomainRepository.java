@@ -119,7 +119,6 @@ public class DomainRepository {
 				PreparedStatement pstmt = con.prepareStatement(insertSQL,
 						Statement.RETURN_GENERATED_KEYS);
 				// Setze Anfrageparameter und fC<hre Anfrage aus
-				System.out.println(insertSQL);
 				int i = 1;
 				for (Map.Entry<String, Object> entry : keysVals.entrySet()) {
 					if (entry.getValue() instanceof String) {
@@ -150,7 +149,6 @@ public class DomainRepository {
 				keysWithMarks = keysWithMarks.substring(0,keysWithMarks.length() -1);
 				String updateSQL = "UPDATE "+table+" SET "+keysWithMarks+" WHERE " + idField + " = ?";
 				PreparedStatement pstmt = con.prepareStatement(updateSQL);
-				System.out.println(updateSQL);
 				// Setze Anfrage Parameter
 				int i = 1;
 				for (Map.Entry<String, Object> entry : keysVals.entrySet()) {

@@ -268,6 +268,7 @@ public class Main {
 		if(!pwin.equals(makler.getPassword())) {
 			System.out.println("");
 			System.out.println("Falsches Passwort, du Trottel!");
+			return;
 		}
 		// For debugs
 	//	makler = EstateAgent.load(1);

@@ -44,7 +44,8 @@ public class House extends Estate {
 			
 			DomainRepository repo = new DomainRepository();
 			int estateId = repo.findIdByForeignId("estate","HouseId",id);
-			House house = (House) Estate.load(estateId);
+			House house = new House();
+			house.getEstateProperties(estateId);
 			Map<String,Object> result = repo.load("house", "Id",id);
 			if (result != null) {				
 				house.setId(id);
@@ -56,6 +57,18 @@ public class House extends Estate {
 			return null;
 	}
 	
+	private void getEstateProperties(int estateId) {
+		Estate estate = Estate.load(estateId);// TODO Auto-generated method stub
+		this.setAgentId(estate.getAgentId());
+		this.setApartmentId(estate.getApartmentId());
+		this.setHouseId(estate.getHouseId());
+		this.setCity(estate.getCity());
+		this.setStreet(estate.getStreet());
+		this.setStreetNumber(estate.getStreetNumber());
+		this.setSquareArea(estate.getSquareArea());
+		this.setZipCode(estate.getZipCode());
+	}
+
 	/**
 	 * Speichert den Makler in der Datenbank. Ist noch keine ID vergeben
 	 * worden, wird die generierte Id von DB2 geholt und dem Model übergeben.
@@ -102,7 +115,7 @@ public class House extends Estate {
 		super.read();
 		setFloors(FormUtil.readInt("floors"));
 		setPrice(FormUtil.readInt("price"));
-		setGarden(FormUtil.readString("garden (y/n)").toLowerCase() == "y"); 
+		setGarden(FormUtil.readString("garden (y/n)").toLowerCase().equals("y")); 
 	}
 
 	public void delete() {

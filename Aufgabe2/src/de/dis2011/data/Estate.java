@@ -37,7 +37,7 @@ public class Estate {
 		return apartmentId;
 	}
 
-	public void setApartmentId(int apartmentId) {
+	public void setApartmentId(Integer apartmentId) {
 		this.apartmentId = apartmentId;
 	}
 
@@ -96,18 +96,19 @@ public class Estate {
 	 */
 	public static Estate load(int id) {
 			DomainRepository repo = new DomainRepository();
-			Map<String,Object> result = repo.load("estate", "Id",id);
+			Map<String,Object> result = repo.load("estate","Id",id);
+			System.out.println(result);
 			if (result != null) {
 				Estate estate = new Estate();
 				estate.setId(id);
-				estate.setAgentId((Integer) result.get("agentId"));
-				estate.setApartmentId((Integer) result.get("apartmentId")); 
-				estate.setHouseId((Integer) result.get("houseId"));
+				estate.setAgentId((Integer) result.get("agentid"));
+				estate.setApartmentId((Integer) result.get("apartmentid")); 
+				estate.setHouseId((Integer) result.get("houseid"));
 				estate.setCity((String) result.get("city"));
-				estate.setZipCode((Integer) result.get("zipCode"));
+				estate.setZipCode((Integer) result.get("zipcode"));
 				estate.setStreet((String) result.get("street"));
-				estate.setStreetNumber((Integer) result.get("streetNumber"));
-				estate.setSquareArea((Integer) result.get("squareArea"));	
+				estate.setStreetNumber((Integer) result.get("streetnumber"));
+				estate.setSquareArea((Integer) result.get("squarearea"));	
 
 				return estate;
 			}

@@ -125,15 +125,10 @@ public class DomainRepository {
 					if (entry.getValue() instanceof String) {
 						pstmt.setString(i,(String) entry.getValue() );
 					} else if (entry.getValue() instanceof Integer) {
-						if (entry.getValue() == null) {
-							pstmt.setNull(i, Types.INTEGER);
-						} else {
-							pstmt.setInt(i,(Integer) entry.getValue());
-						}
+						pstmt.setInt(i,(Integer) entry.getValue());
 					} else {
 						pstmt.setNull(i, Types.INTEGER);
 					}
-					System.out.println(entry.toString());
 					i++;
 				}
 				pstmt.executeUpdate();
@@ -155,7 +150,7 @@ public class DomainRepository {
 				keysWithMarks = keysWithMarks.substring(0,keysWithMarks.length() -1);
 				String updateSQL = "UPDATE "+table+" SET "+keysWithMarks+" WHERE " + idField + " = ?";
 				PreparedStatement pstmt = con.prepareStatement(updateSQL);
-
+				System.out.println(updateSQL);
 				// Setze Anfrage Parameter
 				int i = 1;
 				for (Map.Entry<String, Object> entry : keysVals.entrySet()) {
@@ -163,8 +158,11 @@ public class DomainRepository {
 						pstmt.setString(i,(String) entry.getValue() );
 					} else if (entry.getValue() instanceof Integer) {
 						pstmt.setInt(i,(Integer) entry.getValue());
+					} else {
+						pstmt.setNull(i, Types.INTEGER);
 					}
 					i++;
+					System.out.println(entry);
 				}
 				pstmt.setInt(i, id);
 				pstmt.executeUpdate();

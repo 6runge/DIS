@@ -21,6 +21,7 @@ public class Main {
 		showMainMenu();
 	}
 
+	private static EstateAgent makler;
 	/**
 	 * Zeigt das Hauptmenü
 	 */
@@ -250,7 +251,7 @@ public class Main {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		EstateAgent makler = EstateAgent.loadByLogin(login);
+		makler = EstateAgent.loadByLogin(login);
 		if (makler == null) {
 			System.out.println("");
 			System.out.println("Makler mit dem Login "+login+" konnte nicht geladen werden.");
@@ -268,6 +269,8 @@ public class Main {
 			System.out.println("");
 			System.out.println("Falsches Passwort, du Trottel!");
 		}
+		// For debugs
+	//	makler = EstateAgent.load(1);
 		//Immobilienverwaltungsmenü
 		Menu estateMenu = new Menu("Immobilien-Verwaltung");
 		estateMenu.addEntry("Neue Immobilie", NEW_ESTATE);
@@ -282,7 +285,7 @@ public class Main {
 
 			switch(response) {
 			case NEW_ESTATE:
-				newEstate(makler.getId());
+				newEstate();
 				break;
 			case SHOW_ESTATE:
 				System.out.print("Estate Id? ");
@@ -342,7 +345,7 @@ public class Main {
 	 * Legt einen neuen Makler an, nachdem der Benutzer
 	 * die entprechenden Daten eingegeben hat.
 	 */
-	public static void newEstate(int agentId) {
+	public static void newEstate() {
 		String type = FormUtil.readString("(H)ouse or (A)ppartment?").toLowerCase();
 		while (!(type.equals("h") || type.equals("a")) ) {
 			System.out.println("Falsche Eingabe!");
@@ -355,23 +358,29 @@ public class Main {
 		} else {
 			estate = new Appartment();
 		}
-		estate.setAgentId(agentId);
+		estate.setAgentId(makler.getId());
 		estate.read();
 		estate.save();
 
 		System.out.println("Estate mit der ID "+estate.getId()+" wurde erzeugt.");
 	}
 	public static void updateEstate(int id){
-		EstateAgent agent = EstateAgent.load(id);
-		if (agent == null) {
-			System.out.println("Makler mit der ID "+id+" existiert nicht oder konnte nicht geladen werden.");
+		Estate estate = Estate.load(id);
+		if (estate == null) {
+			System.out.println("Estate mit der ID "+id+" existiert nicht oder konnte nicht geladen werden.");
 			return;
 		}
-		agent.show();
-		agent.read();
-		agent.save();
-
-		System.out.println("Makler mit der ID "+agent.getId()+" wurde bearbeitet.");
+		if (estate.getHouseId() != 0) {
+			estate = House.load(estate.getHouseId());
+		} else if (estate.getApartmentId() != 0) {
+			estate = Appartment.load(estate.getApartmentId());
+		}		
+		estate.show();
+		estate.read();
+		estate.setAgentId(makler.getId());
+		estate.save();
+		
+		System.out.println("Estate mit der ID "+id+" wurde bearbeitet.");
 
 	}
 

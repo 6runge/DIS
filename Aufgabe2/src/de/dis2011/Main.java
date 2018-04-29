@@ -52,6 +52,57 @@ public class Main {
 			}
 		}
 	}
+	
+	private static void showContractMenu() {
+		//Menüoptionen
+		final int NEW_PERSON = 0;
+		final int NEW_CONTRACT = 1;
+		final int SHOW_CONTRACTS = 2;
+		final int BACK = 3;
+		
+		BufferedReader stdin = new BufferedReader(new InputStreamReader(System.in));
+		
+		//Vertragsmenü
+		Menu contractMenu = new Menu("Immobilien-Verwaltung");
+		contractMenu.addEntry("Neue Person", NEW_PERSON);
+		contractMenu.addEntry("Neuer Vertrag", NEW_CONTRACT);
+		contractMenu.addEntry("Zeige Verträge", SHOW_CONTRACTS);
+		contractMenu.addEntry("Zurück zum Hauptmenü", BACK);
+		
+		//Verarbeite Eingabe
+				while(true) {
+					int response = contractMenu.show();
+
+					switch(response) {
+					case NEW_PERSON:
+						newPerson();
+						break;
+					case NEW_CONTRACT:
+						newContract();
+						break;
+					case SHOW_CONTRACTS:
+						showContracts();
+						break;
+					case BACK:
+						return;
+					}
+				}
+	}
+
+	private static void showContracts() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private static void newContract() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private static void newPerson() {
+		// TODO Auto-generated method stub
+		
+	}
 
 	/**
 	 * Zeigt die Maklerverwaltung

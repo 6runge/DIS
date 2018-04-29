@@ -58,6 +58,44 @@ public class DomainRepository {
 	}
 	
 	/**
+	 * Lädt einen Datensatz aus der Datenbank.
+	 * @param table die Tabelle aus der gelesen werden soll
+	 * @param column die Reihe in der der Eintrag steht, über den die korrekte Zeile identifiziert werden soll.
+	 * @param entry der Eintrag, über den die korrekte Zeile identifiziert werden soll.
+	 * @return Daten
+	 */
+	public Map<String,Object> loadByString(String table,String column, String entry) {
+		try {
+			// Hole Verbindung
+			Connection con = DB2ConnectionManager.getInstance().getConnection();
+
+			// Erzeuge Anfrage
+			String selectSQL = "SELECT * FROM "+table+" WHERE "+column+" = ?";
+			PreparedStatement pstmt = con.prepareStatement(selectSQL);
+			pstmt.setString(1, entry);
+			// Führe Anfrage aus
+			ResultSet rs = pstmt.executeQuery();
+			ResultSetMetaData rsmd = rs.getMetaData();
+			int colCount = rsmd.getColumnCount();
+			HashMap<String,Object> result = new HashMap<String,Object>();
+			if (rs.next()) {
+				for (int i = 1;i<= colCount; i++) {
+					String colName = rsmd.getColumnName(i);
+					result.put(colName.toLowerCase(),rs.getObject(i));
+				}				
+			} else {
+				return null;
+			}
+			pstmt.close();
+			return result;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	/**
 	 * Speichert einen Datensatz in der Datenbank. Ist noch keine ID vergeben
 	 * worden, wird die generierte Id von DB2 geholt und dem Model übergeben.
 	 */

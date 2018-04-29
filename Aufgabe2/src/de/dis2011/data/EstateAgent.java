@@ -119,7 +119,6 @@ public class EstateAgent {
 	 * worden, wird die generierte Id von DB2 geholt und dem Model übergeben.
 	 */
 	public void save() {
-		// TODO check for unique login
 		DomainRepository repo = new DomainRepository();
 		HashMap<String,Object> keysVals = new HashMap<String,Object>();
 		keysVals.put("name",getName());
@@ -141,6 +140,11 @@ public class EstateAgent {
 		setName(FormUtil.readString("Name"));
 		setAddress(FormUtil.readString("Adresse"));
 		setLogin(FormUtil.readString("Login"));
+		while(EstateAgent.loadByLogin(getLogin()) != null) {
+			System.out.println("Login-Name bereits vergeben!");
+			setLogin(FormUtil.readString("Login"));
+		}
+			
 		setPassword(FormUtil.readString("Passwort"));
 	}
 

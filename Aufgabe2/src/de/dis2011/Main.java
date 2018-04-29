@@ -231,7 +231,6 @@ public class Main {
 			return;
 		}	
 		agent.show();
-		System.out.print("Makler löschen? ");
 		String str = FormUtil.readString("Makler löschen? (y/n) ");
 		if (str.toLowerCase().equals("y")) {
 			agent.delete();

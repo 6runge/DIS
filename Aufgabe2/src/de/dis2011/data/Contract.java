@@ -100,7 +100,6 @@ public class Contract {
 	 * worden, wird die generierte Id von DB2 geholt und dem Model übergeben.
 	 */
 	public void save() {
-		// TODO check for unique login
 		DomainRepository repo = new DomainRepository();
 		HashMap<String,Object> keysVals = new HashMap<String,Object>();
 		keysVals.put("tenancyContractId",getTenancyContractId());

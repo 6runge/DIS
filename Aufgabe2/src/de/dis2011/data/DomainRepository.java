@@ -3,6 +3,7 @@ package de.dis2011.data;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
@@ -29,20 +30,30 @@ public class DomainRepository {
 	 * @param id ID des zu ladenden Objects
 	 * @return Daten
 	 */
-	public static ResultSet load(String table,int id) {
+	public static Map<String,Object> load(String table,String idField, int id) {
 		try {
 			// Hole Verbindung
 			Connection con = DB2ConnectionManager.getInstance().getConnection();
 
 			// Erzeuge Anfrage
-			String selectSQL = "SELECT * FROM "+table+" WHERE id = ?";
+			String selectSQL = "SELECT * FROM "+table+" WHERE "+idField+" = ?";
 			PreparedStatement pstmt = con.prepareStatement(selectSQL);
 			pstmt.setInt(1, id);
-
 			// Führe Anfrage aus
 			ResultSet rs = pstmt.executeQuery();
+			ResultSetMetaData rsmd = rs.getMetaData();
+			int colCount = rsmd.getColumnCount();
+			HashMap<String,Object> result = new HashMap<String,Object>();
+			if (rs.next()) {
+				for (int i = 1;i<= colCount; i++) {
+					String colName = rsmd.getColumnName(i);
+					result.put(colName.toLowerCase(),rs.getObject(i));
+				}				
+			} else {
+				return null;
+			}
 			pstmt.close();
-			return rs;
+			return result;
 
 		} catch (SQLException e) {
 			e.printStackTrace();

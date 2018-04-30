@@ -52,7 +52,7 @@ public class Person {
 		setAddress(person.getAddress());
 	}
 	/**
-	 * Lädt einen Makler aus der Datenbank
+	 * Lädt eine Person aus der Datenbank
 	 * @param id ID des zu ladenden Maklers
 	 * @return Makler-Instanz
 	 */
@@ -72,7 +72,7 @@ public class Person {
 	}
 	
 	/**
-	 * Speichert den Makler in der Datenbank. Ist noch keine ID vergeben
+	 * Speichert die Person in der Datenbank. Ist noch keine ID vergeben
 	 * worden, wird die generierte Id von DB2 geholt und dem Model übergeben.
 	 */
 	public void save() {
@@ -88,7 +88,7 @@ public class Person {
 	public void show() {
 		System.out.println("person mit der ID "+id+":");
 		System.out.println("First Name: "+getFName());
-		System.out.println("LAst Name: "+getLName());
+		System.out.println("Last Name: "+getLName());
 		System.out.println("address: "+getAddress());
 
 	}

@@ -74,9 +74,9 @@ public class Contract {
 		setPlace(contract.getPlace());
 	}
 	/**
-	 * Lädt einen Makler aus der Datenbank
+	 * Lädt einen Vertrag aus der Datenbank
 	 * @param id ID des zu ladenden Maklers
-	 * @return Makler-Instanz
+	 * @return Vertrags-Instanz
 	 */
 	public static Contract load(int id) {
 			DomainRepository repo = new DomainRepository();
@@ -96,7 +96,7 @@ public class Contract {
 	}
 	
 	/**
-	 * Speichert den Makler in der Datenbank. Ist noch keine ID vergeben
+	 * Speichert den Vertrag in der Datenbank. Ist noch keine ID vergeben
 	 * worden, wird die generierte Id von DB2 geholt und dem Model übergeben.
 	 */
 	public void save() {

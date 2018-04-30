@@ -47,9 +47,9 @@ public class PurchaseContract extends Contract {
 	}
 
 	/**
-	 * Lädt einen Makler aus der Datenbank
+	 * Lädt einen Vertrag aus der Datenbank
 	 * @param id ID des zu ladenden Maklers
-	 * @return Makler-Instanz
+	 * @return Vertrags-Instanz
 	 */
 	public static PurchaseContract load(int id) {
 			
@@ -72,7 +72,7 @@ public class PurchaseContract extends Contract {
 	}
 	
 	/**
-	 * Speichert den Makler in der Datenbank. Ist noch keine ID vergeben
+	 * Speichert den Vertrag in der Datenbank. Ist noch keine ID vergeben
 	 * worden, wird die generierte Id von DB2 geholt und dem Model übergeben.
 	 */
 	public void save() {

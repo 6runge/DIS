@@ -144,7 +144,7 @@ public class Main {
 		person.read();
 		person.save();
 
-		System.out.println("PErson mit der ID "+person.getId()+" wurde erzeugt.");
+		System.out.println("Person mit der ID "+person.getId()+" wurde erzeugt.");
 		
 	}
 

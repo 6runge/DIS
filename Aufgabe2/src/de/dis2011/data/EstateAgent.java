@@ -2,6 +2,9 @@ package de.dis2011.data;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import com.ibm.db2.jcc.b.SqlException;
+
 import de.dis2011.FormUtil;
 
 /**
@@ -142,8 +145,13 @@ public class EstateAgent {
 	}
 
 	public void delete() {
+		if (Estate.hasNoEstate(this)) {
 		DomainRepository repo = new DomainRepository();
 		repo.delete("estateagent", "Id", id);
+		}
+		else {
+			System.out.println("Makler ist noch mit Immobilien betraut und kann nicht gelöscht werden.");
+		}
 		
 	}
 }

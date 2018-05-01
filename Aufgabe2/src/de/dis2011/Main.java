@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
 
+import com.ibm.db2.jcc.b.SqlException;
+
 import de.dis2011.data.Appartment;
 import de.dis2011.data.Contract;
 import de.dis2011.data.DomainRepository;
@@ -237,7 +239,7 @@ public class Main {
 		agent.show();
 		String str = FormUtil.readString("Makler löschen? (y/n) ");
 		if (str.toLowerCase().equals("y")) {
-			agent.delete();
+				agent.delete();
 		}
 	}
 
@@ -281,31 +283,18 @@ public class Main {
 	private static void login() {
 		BufferedReader stdin = new BufferedReader(new InputStreamReader(System.in));
 		
-		//agent login
-		String login = "";
-		System.out.print("Makler-Login? ");
-		try {
-			login = stdin.readLine();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		String login = FormUtil.readString("Makler-Login");
 		makler = EstateAgent.loadByLogin(login);
 		if (makler == null) {
 			System.out.println("");
 			System.out.println("Makler mit dem Login "+login+" konnte nicht geladen werden.");
 			return;
 		}
-		System.out.println("");
-		System.out.print("Passwort? ");
-		String pwin = "";
-		try {
-			pwin = stdin.readLine();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		String pwin = FormUtil.readString("Passwort");
+
 		if(!pwin.equals(makler.getPassword())) {
 			System.out.println("");
-			System.out.println("Falsches Passwort, du Trottel!");
+			System.out.println("Falsches Passwort");
 			return;
 		}		
 	}

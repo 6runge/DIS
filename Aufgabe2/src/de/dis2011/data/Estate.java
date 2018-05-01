@@ -1,6 +1,9 @@
 package de.dis2011.data;
 
+import java.sql.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import de.dis2011.FormUtil;
@@ -176,6 +179,20 @@ public class Estate {
 		DomainRepository repo = new DomainRepository();
 		repo.delete("estate", "Id", id);
 
+	}
+	
+
+	public static boolean hasNoEstate(EstateAgent agent) {
+		int aId = agent.getId();
+		DomainRepository repo = new DomainRepository();
+		List<HashMap<String,Object>> estateData = repo.loadAll("estate");
+		for (HashMap<String,Object> resultRow: estateData) {
+			if ((Integer) resultRow.get("agentid") == aId) {
+				return false;
+			}
+		}
+				
+		return true;
 	}
 
 }

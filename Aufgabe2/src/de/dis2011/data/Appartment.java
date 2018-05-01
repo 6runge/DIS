@@ -62,7 +62,7 @@ public class Appartment extends Estate {
 			DomainRepository repo = new DomainRepository();
 			int estateId = repo.findIdByForeignId("estate","ApartmentId",id);
 			Appartment appartment = new Appartment();
-
+			appartment.getEstateProperties(estateId);
 			Map<String,Object> result = repo.load("apartment", "Id",id);
 			if (result != null) {				
 				appartment.setId(id);

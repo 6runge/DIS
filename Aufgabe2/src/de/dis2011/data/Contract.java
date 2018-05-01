@@ -1,7 +1,6 @@
 package de.dis2011.data;
 
 import java.sql.Date;
-import java.text.DateFormat;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;

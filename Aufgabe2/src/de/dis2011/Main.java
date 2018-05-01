@@ -71,7 +71,7 @@ public class Main {
 		final int SHOW_CONTRACTS = 2;
 		final int BACK = 3;
 		
-		BufferedReader stdin = new BufferedReader(new InputStreamReader(System.in));
+		//BufferedReader stdin = new BufferedReader(new InputStreamReader(System.in));
 		
 		//Vertragsmenü
 		Menu contractMenu = new Menu("Immobilien-Verwaltung");
@@ -112,7 +112,7 @@ public class Main {
 			} else if (contract.getPurchaseContractId() != null) {
 				contractTemp = PurchaseContract.load(contract.getPurchaseContractId());
 			}
-			int tempId = contractTemp.getId();
+			//int tempId = contractTemp.getId();
 			contractTemp.setId(contract.getId());
 			contractTemp.show();
 		}

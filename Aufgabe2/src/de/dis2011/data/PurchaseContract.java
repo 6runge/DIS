@@ -116,10 +116,14 @@ public class PurchaseContract extends Contract {
 		super.show();
 		System.out.println("purchaseContract Zusatzdaten:");
 		System.out.println("----Buyer:---------");
-		getBuyer().show();
+		if (getBuyer() != null) {
+			getBuyer().show();
+		}
 		System.out.println("-------------");
 		System.out.println("----House:---------");
-		getHouse().show();
+		if (getBuyer() != null) { 
+			getHouse().show();
+		}
 		System.out.println("-------------");		
 		System.out.println("Number of installments: "+getNoOfInstallments()); 
 		System.out.println("Interest Rate: "+getInterestRate());

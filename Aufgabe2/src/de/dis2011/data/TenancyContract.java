@@ -126,11 +126,16 @@ public class TenancyContract extends Contract {
 	public void show() {
 		super.show();
 		System.out.println("TenancyContract Zusatzdaten:");
+		
 		System.out.println("----Tenant:---------");
-		getTenant().show();
+		if (getTenant() != null) {
+			getTenant().show();
+		}
 		System.out.println("-------------");
 		System.out.println("----Apartment:---------");
-		getApartment().show();
+		if (getApartment() != null) {
+			getApartment().show();
+		}
 		System.out.println("-------------");		
 		System.out.println("Start Date: "+getStartDate()); 
 		System.out.println("duration: "+getDuration());

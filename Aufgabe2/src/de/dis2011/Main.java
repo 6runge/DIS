@@ -278,15 +278,7 @@ public class Main {
 
 
 	}
-	
-	private static void showEstateMenu() {
-		//Menüoptionen
-		final int NEW_ESTATE = 0;
-		final int SHOW_ESTATE = 1;
-		final int UPDATE_ESTATE = 2;
-		final int DELETE_ESTATE = 3;
-		final int BACK = 4;
-		
+	private static void login() {
 		BufferedReader stdin = new BufferedReader(new InputStreamReader(System.in));
 		
 		//agent login
@@ -315,6 +307,19 @@ public class Main {
 			System.out.println("");
 			System.out.println("Falsches Passwort, du Trottel!");
 			return;
+		}		
+	}
+	
+	private static void showEstateMenu() {
+		//Menüoptionen
+		final int NEW_ESTATE = 0;
+		final int SHOW_ESTATE = 1;
+		final int UPDATE_ESTATE = 2;
+		final int DELETE_ESTATE = 3;
+		final int BACK = 4;
+		BufferedReader stdin = new BufferedReader(new InputStreamReader(System.in));
+		if (makler == null) {
+			login();
 		}
 		// For debugs
 	//	makler = EstateAgent.load(1);

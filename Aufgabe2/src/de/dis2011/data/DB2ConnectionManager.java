@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.sql.Connection;
@@ -32,8 +33,7 @@ public class DB2ConnectionManager {
 		try {
 			// Holen der Einstellungen aus der db2.properties Datei
 			Properties properties = new Properties();
-			URL url = ClassLoader.getSystemResource("db2.properties");
-			FileInputStream stream = new FileInputStream(new File(url.toURI()));
+			InputStream stream = ClassLoader.getSystemResourceAsStream("db2.properties");
 			properties.load(stream);
 			stream.close();
 
@@ -53,8 +53,8 @@ public class DB2ConnectionManager {
 			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
+//		} catch (URISyntaxException e) {
+//			e.printStackTrace();
 		}
 
 	}

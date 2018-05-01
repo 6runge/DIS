@@ -124,6 +124,6 @@ INSERT INTO tenancyContract (apartmentID, tenantID, startDate, duration, additio
 INSERT INTO contract (contractNo, tenancyContractID, date, place)
             VALUES (23, 1, '1992-03-22', 'Essen');
 INSERT INTO purchaseContract (houseID, buyerID, NoOfInstallments, interestRate)
-            VALUES (1, 2, 24, 1235);
+            VALUES (1, 2, 24, 123);
 INSERT INTO contract (contractNo, purchaseContractID, date, place)
             VALUES (54, 1, '2013-11-11', 'Bad Oldesoe');

@@ -116,9 +116,9 @@ INSERT INTO house (floors, price, garden)
 INSERT INTO estate (agentID, houseID, city, zipCode, street, streetNumber, squareArea)
             VALUES (1, 1, 'Hageln', 33541, 'Harzweg', 7, 156);
 INSERT INTO person (fName, lName, address) 
-            VALUES ('Westrupp', 'Walter', '45128 Essen');
+            VALUES ('Walter', 'Westrupp', '45128 Essen');
 INSERT INTO person (fName, lName, address) 
-            VALUES ('Dampf', 'Hans', '20254 Hamburg');
+            VALUES ('Hans', 'Dampf', '20254 Hamburg');
 INSERT INTO tenancyContract (apartmentID, tenantID, startDate, duration, additionalCost) 
             VALUES (2, 1, '1992-05-01', 360, 43);
 INSERT INTO contract (contractNo, tenancyContractID, date, place)

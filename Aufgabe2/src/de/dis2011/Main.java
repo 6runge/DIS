@@ -120,6 +120,7 @@ public class Main {
 
 	private static void newContract() {
 		Contract contract = new Contract();
+		String idGetterHelper = "PurchaseContractId";
 		String type = FormUtil.readString("(T)enancy or (P)urchase?").toLowerCase();
 		while (!(type.equals("t") || type.equals("p")) ) {
 			System.out.println("Falsche Eingabe!");
@@ -127,14 +128,17 @@ public class Main {
 		}
 		if (type.equals("t")) {
 			contract = new TenancyContract();
-		
+			idGetterHelper = "TenancyContractId";
 		} else {
 			contract = new PurchaseContract();
 		}
 		contract.read();
 		contract.save();
 
-		System.out.println("Vertrag mit der ID "+contract.getId()+" wurde erzeugt.");
+		int cId = -1;
+		DomainRepository repo = new DomainRepository();
+		cId = repo.findIdByForeignId("contract",idGetterHelper,contract.getId());
+		System.out.println("Vertrag mit der ID "+ String.valueOf(cId) +" wurde erzeugt.");
 		
 	}
 

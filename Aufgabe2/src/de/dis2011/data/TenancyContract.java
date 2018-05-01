@@ -55,8 +55,8 @@ public class TenancyContract extends Contract {
 	}
 
 	/**
-	 * Lädt einen Makler aus der Datenbank
-	 * @param id ID des zu ladenden Maklers
+	 * Lädt einen Vertrag aus der Datenbank
+	 * @param id ID des zu ladenden Vertrags
 	 * @return Makler-Instanz
 	 */
 	public static TenancyContract load(int id) {
@@ -81,14 +81,24 @@ public class TenancyContract extends Contract {
 	}
 	
 	/**
-	 * Speichert den Makler in der Datenbank. Ist noch keine ID vergeben
+	 * Speichert den Vertrag in der Datenbank. Ist noch keine ID vergeben
 	 * worden, wird die generierte Id von DB2 geholt und dem Model übergeben.
 	 */
 	public void save() {
 		DomainRepository repo = new DomainRepository();
 		HashMap<String,Object> keysVals = new HashMap<String,Object>();
-		keysVals.put("apartmentid",getApartment().getId());
-		keysVals.put("tenantid",getTenant().getId()); 
+		int apartmentId = -1;
+		int tenantId = -1;
+		Appartment apartment = getApartment();
+		Person tenant = getTenant();
+		if (apartment != null) {
+			apartmentId = apartment.getId();
+		}
+		if (tenant != null) {
+			tenantId = tenant.getId();
+		}
+		keysVals.put("apartmentid",apartmentId);
+		keysVals.put("tenantid",tenantId); 
 		keysVals.put("startdate",getStartDate());
 		keysVals.put("duration",getDuration());
 		keysVals.put("additionalcost",getAdditionalCost());
@@ -131,9 +141,25 @@ public class TenancyContract extends Contract {
 	
 	public void read() {
 		super.read();
-		Person tenant = Person.load(FormUtil.readInt("Tenant Id:"));
+		Person tenant = null;
+		int tenantId = -1;
+		while (tenant == null) {
+			tenantId = FormUtil.readInt("Tenant Id");
+			tenant = Person.load(tenantId);
+			if (tenant == null) {
+				System.out.println("Invalid id. Try again!");
+			}
+		}
 		setTenant(tenant);
-		Appartment apartment = Appartment.load(FormUtil.readInt("Apartment Id:"));
+		Appartment apartment = null;
+		int apartmentId = -1;
+		while (apartment == null) {
+			apartmentId = FormUtil.readInt("Apartment Id");
+			apartment = Appartment.load(apartmentId);
+			if (apartment == null) {
+				System.out.println("Invalid id. Try again!");
+			}
+		}
 		setStartDate(FormUtil.readDate("Start date"));;
 		setApartment(apartment);
 		setDuration(FormUtil.readInt("duration"));

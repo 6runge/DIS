@@ -16,15 +16,15 @@ public class Estate {
 	private String street;
 	private int streetNumber;
 	private int squareArea;	
-	
+
 	public int getId() {
 		return id;
 	}
-	
+
 	public void setId(int id) {
 		this.id = id;
 	}
-	
+
 	public Integer getAgentId() {
 		return agentId;
 	}
@@ -89,15 +89,17 @@ public class Estate {
 		this.squareArea = squareArea;
 	}
 	public void getEstateProperties(int estateId) {
-		Estate estate = Estate.load(estateId);// TODO Auto-generated method stub
-		this.setAgentId(estate.getAgentId());
-		this.setApartmentId(estate.getApartmentId());
-		this.setHouseId(estate.getHouseId());
-		this.setCity(estate.getCity());
-		this.setStreet(estate.getStreet());
-		this.setStreetNumber(estate.getStreetNumber());
-		this.setSquareArea(estate.getSquareArea());
-		this.setZipCode(estate.getZipCode());
+		Estate estate = Estate.load(estateId);
+		if(estate != null) {
+			this.setAgentId(estate.getAgentId());
+			this.setApartmentId(estate.getApartmentId());
+			this.setHouseId(estate.getHouseId());
+			this.setCity(estate.getCity());
+			this.setStreet(estate.getStreet());
+			this.setStreetNumber(estate.getStreetNumber());
+			this.setSquareArea(estate.getSquareArea());
+			this.setZipCode(estate.getZipCode());
+		}
 	}
 	/**
 	 * Lädt einen Makler aus der Datenbank
@@ -105,25 +107,25 @@ public class Estate {
 	 * @return Makler-Instanz
 	 */
 	public static Estate load(int id) {
-			DomainRepository repo = new DomainRepository();
-			Map<String,Object> result = repo.load("estate","Id",id);
-			if (result != null) {
-				Estate estate = new Estate();
-				estate.setId(id);
-				estate.setAgentId((Integer) result.get("agentid"));
-				estate.setApartmentId((Integer) result.get("apartmentid")); 
-				estate.setHouseId((Integer) result.get("houseid"));
-				estate.setCity((String) result.get("city"));
-				estate.setZipCode((Integer) result.get("zipcode"));
-				estate.setStreet((String) result.get("street"));
-				estate.setStreetNumber((Integer) result.get("streetnumber"));
-				estate.setSquareArea((Integer) result.get("squarearea"));	
+		DomainRepository repo = new DomainRepository();
+		Map<String,Object> result = repo.load("estate","Id",id);
+		if (result != null) {
+			Estate estate = new Estate();
+			estate.setId(id);
+			estate.setAgentId((Integer) result.get("agentid"));
+			estate.setApartmentId((Integer) result.get("apartmentid")); 
+			estate.setHouseId((Integer) result.get("houseid"));
+			estate.setCity((String) result.get("city"));
+			estate.setZipCode((Integer) result.get("zipcode"));
+			estate.setStreet((String) result.get("street"));
+			estate.setStreetNumber((Integer) result.get("streetnumber"));
+			estate.setSquareArea((Integer) result.get("squarearea"));	
 
-				return estate;
-			}
-			return null;
+			return estate;
+		}
+		return null;
 	}
-	
+
 	/**
 	 * Speichert den Makler in der Datenbank. Ist noch keine ID vergeben
 	 * worden, wird die generierte Id von DB2 geholt und dem Model übergeben.
@@ -142,14 +144,14 @@ public class Estate {
 		keysVals.put("squareArea",getSquareArea());	
 		id = repo.save("estate","Id",getId(),keysVals);
 	}
-	
+
 	public void show() {
 		System.out.println("Estate mit der ID "+id+":");
 		EstateAgent agent = EstateAgent.load(getAgentId());
 		System.out.println("Makler: " + agent.getName());  
 		//		System.out.println("agentId: "+getAgentId());
-//		System.out.println("apartmentId: "+getApartmentId()); 
-//		System.out.println("houseId: "+getHouseId());
+		//		System.out.println("apartmentId: "+getApartmentId()); 
+		//		System.out.println("houseId: "+getHouseId());
 		System.out.println("city: "+getCity());
 		System.out.println("zipCode: "+getZipCode());
 		System.out.println("street: "+getStreet());
@@ -157,11 +159,11 @@ public class Estate {
 		System.out.println("squareArea: "+getSquareArea());	
 
 	}
-	
+
 	public void read() {
-//		setAgentId(FormUtil.readInt("agentId"));
-//		setApartmentId(FormUtil.readInt("apartmentId")); 
-//		setHouseId(FormUtil.readInt("houseId"));
+		//		setAgentId(FormUtil.readInt("agentId"));
+		//		setApartmentId(FormUtil.readInt("apartmentId")); 
+		//		setHouseId(FormUtil.readInt("houseId"));
 		setCity(FormUtil.readString("city"));
 		setZipCode(FormUtil.readInt("zipCode"));
 		setStreet(FormUtil.readString("street"));
@@ -173,7 +175,7 @@ public class Estate {
 	public void delete() {
 		DomainRepository repo = new DomainRepository();
 		repo.delete("estate", "Id", id);
-		
+
 	}
 
 }

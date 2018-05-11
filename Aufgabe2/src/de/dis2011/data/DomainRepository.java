@@ -1,25 +1,19 @@
 package de.dis2011.data;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 public class DomainRepository {
-
-	private int id = -1;
-	
-	public int getId() {
-		return id;
-	}
-	
-	public void setId(int id) {
-		this.id = id;
-	}
 
 	/**
 	 * Lädt einen Datensatz aus der Datenbank
@@ -35,6 +29,44 @@ public class DomainRepository {
 			String selectSQL = "SELECT * FROM "+table+" WHERE "+idField+" = ?";
 			PreparedStatement pstmt = con.prepareStatement(selectSQL);
 			pstmt.setInt(1, id);
+			// Führe Anfrage aus
+			ResultSet rs = pstmt.executeQuery();
+			ResultSetMetaData rsmd = rs.getMetaData();
+			int colCount = rsmd.getColumnCount();
+			HashMap<String,Object> result = new HashMap<String,Object>();
+			if (rs.next()) {
+				for (int i = 1;i<= colCount; i++) {
+					String colName = rsmd.getColumnName(i);
+					result.put(colName.toLowerCase(),rs.getObject(i));
+				}				
+			} else {
+				return null;
+			}
+			pstmt.close();
+			return result;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	/**
+	 * Lädt einen Datensatz aus der Datenbank.
+	 * @param table die Tabelle aus der gelesen werden soll
+	 * @param column die Reihe in der der Eintrag steht, über den die korrekte Zeile identifiziert werden soll.
+	 * @param entry der Eintrag, über den die korrekte Zeile identifiziert werden soll.
+	 * @return Daten
+	 */
+	public Map<String,Object> loadByString(String table,String column, String entry) {
+		try {
+			// Hole Verbindung
+			Connection con = DB2ConnectionManager.getInstance().getConnection();
+
+			// Erzeuge Anfrage
+			String selectSQL = "SELECT * FROM "+table+" WHERE "+column+" = ?";
+			PreparedStatement pstmt = con.prepareStatement(selectSQL);
+			pstmt.setString(1, entry);
 			// Führe Anfrage aus
 			ResultSet rs = pstmt.executeQuery();
 			ResultSetMetaData rsmd = rs.getMetaData();
@@ -80,13 +112,16 @@ public class DomainRepository {
 				PreparedStatement pstmt = con.prepareStatement(insertSQL,
 						Statement.RETURN_GENERATED_KEYS);
 				// Setze Anfrageparameter und fC<hre Anfrage aus
-				System.out.println(insertSQL);
 				int i = 1;
 				for (Map.Entry<String, Object> entry : keysVals.entrySet()) {
 					if (entry.getValue() instanceof String) {
 						pstmt.setString(i,(String) entry.getValue() );
 					} else if (entry.getValue() instanceof Integer) {
 						pstmt.setInt(i,(Integer) entry.getValue());
+					} else if (entry.getValue() instanceof Date) {
+						pstmt.setDate(i, (Date) entry.getValue());
+					}else {
+						pstmt.setNull(i, Types.INTEGER);
 					}
 					i++;
 				}
@@ -109,7 +144,6 @@ public class DomainRepository {
 				keysWithMarks = keysWithMarks.substring(0,keysWithMarks.length() -1);
 				String updateSQL = "UPDATE "+table+" SET "+keysWithMarks+" WHERE " + idField + " = ?";
 				PreparedStatement pstmt = con.prepareStatement(updateSQL);
-
 				// Setze Anfrage Parameter
 				int i = 1;
 				for (Map.Entry<String, Object> entry : keysVals.entrySet()) {
@@ -117,8 +151,10 @@ public class DomainRepository {
 						pstmt.setString(i,(String) entry.getValue() );
 					} else if (entry.getValue() instanceof Integer) {
 						pstmt.setInt(i,(Integer) entry.getValue());
+					} else {
+						pstmt.setNull(i, Types.INTEGER);
 					}
-					i++;
+					i++;;
 				}
 				pstmt.setInt(i, id);
 				pstmt.executeUpdate();
@@ -168,5 +204,48 @@ public class DomainRepository {
 			e.printStackTrace();
 		}		
 		return 0;
+	}
+
+	public List<HashMap<String,Object>> loadAll(String table) {
+		try {
+			// Hole Verbindung
+			Connection con = DB2ConnectionManager.getInstance().getConnection();
+
+			// Erzeuge Anfrage
+			String selectSQL = "SELECT * FROM "+table;
+			PreparedStatement pstmt = con.prepareStatement(selectSQL);
+						// Führe Anfrage aus
+			ResultSet rs = pstmt.executeQuery();
+			ResultSetMetaData rsmd = rs.getMetaData();
+			int colCount = rsmd.getColumnCount();
+			List<HashMap<String,Object>> result = new LinkedList<HashMap<String,Object>>();
+			HashMap<String,Object> nextResult = new HashMap<String,Object>(); 
+			if (rs.next()) {
+				
+				for (int i = 1;i<= colCount; i++) {
+					String colName = rsmd.getColumnName(i);
+					nextResult.put(colName.toLowerCase(),rs.getObject(i));
+				}
+				result.add(nextResult);
+				
+			} else {
+				return null;
+			}
+			while (rs.next()) {
+				nextResult = new HashMap<String,Object>();
+				for (int i = 1;i<= colCount; i++) {
+					String colName = rsmd.getColumnName(i);
+					nextResult.put(colName.toLowerCase(),rs.getObject(i));
+				}
+				result.add(nextResult);
+			}
+			
+			pstmt.close();
+			return result;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;// TODO Auto-generated method stub
 	}
 }

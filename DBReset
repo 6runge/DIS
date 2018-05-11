@@ -101,6 +101,8 @@ CREATE TABLE contract(
 -- populate tables
 INSERT INTO estateAgent (name, address, login, password) 
             VALUES ('Walter Freiwald', 'Waldweg 3, 79098 Freiburg', 'walfrei', 'pw');
+INSERT INTO estateAgent (name, address, login, password) 
+            VALUES ('Tester McTippnichsoviel', 'Rhoda Drive 288, 17601 Lancaster, PA', 'q', 'q');
 INSERT INTO apartment (floor, rent, rooms, balcony, kitchen) 
             VALUES (3, 856, 2, 0, 1);
 INSERT INTO estate (agentID, apartmentID, city, zipCode, street, streetNumber, squareArea)
@@ -114,14 +116,14 @@ INSERT INTO house (floors, price, garden)
 INSERT INTO estate (agentID, houseID, city, zipCode, street, streetNumber, squareArea)
             VALUES (1, 1, 'Hageln', 33541, 'Harzweg', 7, 156);
 INSERT INTO person (fName, lName, address) 
-            VALUES ('Westrupp', 'Walter', '45128 Essen');
+            VALUES ('Walter', 'Westrupp', '45128 Essen');
 INSERT INTO person (fName, lName, address) 
-            VALUES ('Dampf', 'Hans', '20254 Hamburg');
+            VALUES ('Hans', 'Dampf', '20254 Hamburg');
 INSERT INTO tenancyContract (apartmentID, tenantID, startDate, duration, additionalCost) 
             VALUES (2, 1, '1992-05-01', 360, 43);
 INSERT INTO contract (contractNo, tenancyContractID, date, place)
             VALUES (23, 1, '1992-03-22', 'Essen');
 INSERT INTO purchaseContract (houseID, buyerID, NoOfInstallments, interestRate)
-            VALUES (1, 2, 24, 1235);
+            VALUES (1, 2, 24, 123);
 INSERT INTO contract (contractNo, purchaseContractID, date, place)
             VALUES (54, 1, '2013-11-11', 'Bad Oldesoe');

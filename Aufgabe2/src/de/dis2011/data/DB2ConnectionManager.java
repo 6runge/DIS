@@ -1,11 +1,8 @@
 package de.dis2011.data;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -32,8 +29,7 @@ public class DB2ConnectionManager {
 		try {
 			// Holen der Einstellungen aus der db2.properties Datei
 			Properties properties = new Properties();
-			URL url = ClassLoader.getSystemResource("db2.properties");
-			FileInputStream stream = new FileInputStream(new File(url.toURI()));
+			InputStream stream = ClassLoader.getSystemResourceAsStream("db2.properties");
 			properties.load(stream);
 			stream.close();
 
@@ -53,8 +49,8 @@ public class DB2ConnectionManager {
 			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
+//		} catch (URISyntaxException e) {
+//			e.printStackTrace();
 		}
 
 	}

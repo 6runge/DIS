@@ -1,15 +1,11 @@
 package de.dis2011.data;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.ibm.db2.jcc.b.SqlException;
+
 import de.dis2011.FormUtil;
-import de.dis2011.data.DB2ConnectionManager;
 
 /**
  * Makler-Bean
@@ -89,11 +85,36 @@ public class EstateAgent {
 	}
 	
 	/**
+	 * Lädt einen Makler aus der Datenbank
+	 * @param login login des zu ladenden Maklers
+	 * @return Makler-Instanz
+	 */
+	public static EstateAgent loadByLogin(String login) {
+			DomainRepository repo = new DomainRepository();
+			Map<String,Object> result = repo.loadByString("estateagent", "login", login);
+			if (result != null) {
+				EstateAgent ts = new EstateAgent();
+				Object id = result.get("id");
+				if (id instanceof Integer) {
+					ts.setId((Integer) result.get("id"));
+				}
+				else {
+					System.out.println("The ID for agent "+login+" is of an invalid data type.");
+				}
+				ts.setName((String) result.get("name"));
+				ts.setAddress((String) result.get("address"));
+				ts.setLogin(login);
+				ts.setPassword((String) result.get("password"));
+				return ts;
+			}
+			return null;
+	}
+	
+	/**
 	 * Speichert den Makler in der Datenbank. Ist noch keine ID vergeben
 	 * worden, wird die generierte Id von DB2 geholt und dem Model übergeben.
 	 */
 	public void save() {
-		// TODO check for unique login
 		DomainRepository repo = new DomainRepository();
 		HashMap<String,Object> keysVals = new HashMap<String,Object>();
 		keysVals.put("name",getName());
@@ -115,12 +136,22 @@ public class EstateAgent {
 		setName(FormUtil.readString("Name"));
 		setAddress(FormUtil.readString("Adresse"));
 		setLogin(FormUtil.readString("Login"));
+		while(EstateAgent.loadByLogin(getLogin()) != null) {
+			System.out.println("Login-Name bereits vergeben!");
+			setLogin(FormUtil.readString("Login"));
+		}
+			
 		setPassword(FormUtil.readString("Passwort"));
 	}
 
 	public void delete() {
+		if (Estate.hasNoEstate(this)) {
 		DomainRepository repo = new DomainRepository();
 		repo.delete("estateagent", "Id", id);
+		}
+		else {
+			System.out.println("Makler ist noch mit Immobilien betraut und kann nicht gelöscht werden.");
+		}
 		
 	}
 }

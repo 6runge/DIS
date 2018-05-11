@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!--
+  ~ Hibernate, Relational Persistence for Idiomatic Java
+  ~
+  ~ License: GNU Lesser General Public License (LGPL), version 2.1 or later.
+  ~ See the lgpl.txt file in the root directory or <http://www.gnu.org/licenses/lgpl-2.1.html>.
+  -->
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+
+    <session-factory>
+
+        <!-- Database connection settings -->
+        <property name="connection.driver_class">org.h2.Driver</property>
+        
+        <!-- Server mode -->
+        <property name="connection.url">jdbc:h2:tcp://localhost/./data/estatedb</property>
+        
+        <!-- Embedded in memory mode     
+        <property name="connection.url">jdbc:h2:./data/estatedb</property>
+        -->
+          
+        <property name="connection.username">sa</property>
+        <property name="connection.password"/>
+
+        <!-- JDBC connection pool (use the built-in) -->
+        <property name="connection.pool_size">100</property>
+
+        <!-- SQL dialect -->
+        <property name="dialect">org.hibernate.dialect.DB2Dialect</property>
+
+        <!-- Disable the second-level cache  -->
+        <property name="cache.provider_class">org.hibernate.cache.internal.NoCacheProvider</property>
+
+        <!-- Echo all executed SQL to stdout -->
+        <property name="show_sql">true</property>
+
+        <!-- Drop and re-create the database schema on startup (none | validate | update | create | create-drop) -->
+        <property name="hbm2ddl.auto">create-drop</property>
+
+		<mapping class="de.dis2018.data.House" />
+		<mapping class="de.dis2018.data.Apartment" />
+		<mapping class="de.dis2018.data.Person" />
+		<mapping class="de.dis2018.data.PurchaseContract" />
+		<mapping class="de.dis2018.data.TenancyContract" />
+		<mapping class="de.dis2018.data.EstateAgent" />
+		<mapping class="de.dis2018.data.Estate" />
+
+    </session-factory>
+
+</hibernate-configuration>

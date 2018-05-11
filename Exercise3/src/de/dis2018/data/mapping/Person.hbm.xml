@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="de.dis2018.data.Person" table="person">
+		<id name="id" column="id">
+			<generator class="native" />
+		</id>
+		<property name="firstname" type="string" column="firstname" />
+		<property name="name" type="string" column="name" />
+		<property name="address" type="string" column="address" />
+	</class>
+</hibernate-mapping>

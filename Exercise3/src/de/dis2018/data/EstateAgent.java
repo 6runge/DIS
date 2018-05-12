@@ -26,7 +26,6 @@ public class EstateAgent {
 	private String address;
 	private String login;
 	private String password;
-	static int currentId = 0;
 	private Set<Estate> estates;
 	
 	public EstateAgent() {
@@ -43,7 +42,6 @@ public class EstateAgent {
 		this.id = id;
 	}
 	
-	@Column(name = "NAME")
 	public String getName() {
 		return name;
 	}
@@ -51,7 +49,7 @@ public class EstateAgent {
 	public void setName(String name) {
 		this.name = name;
 	}
-	@Column(name = "ADDRESS")
+
 	public String getAddress() {
 		return address;
 	}
@@ -59,7 +57,7 @@ public class EstateAgent {
 	public void setAddress(String address) {
 		this.address = address;
 	}
-	@Column(name = "LOGIN")
+
 	public String getLogin() {
 		return login;
 	}
@@ -67,7 +65,7 @@ public class EstateAgent {
 	public void setLogin(String login) {
 		this.login = login;
 	}
-	@Column(name = "PASSWORD")
+
 	public String getPassword() {
 		return password;
 	}

@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import de.dis2018.util.Helper;
 
@@ -25,6 +27,7 @@ public class TenancyContract extends Contract {
 		super();
 	}
 	
+	@Temporal(TemporalType.TIMESTAMP)
 	public Date getStartDate() {
 		return startDate;
 	}

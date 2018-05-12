@@ -95,6 +95,7 @@ public class PersonEditor {
 				p.setName(newName);
 			if(!newAddresss.equals(""))
 				p.setAddress(newAddresss);
+			service.updatePerson(p);
 		}
 	}
 	

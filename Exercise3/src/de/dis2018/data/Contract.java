@@ -22,13 +22,8 @@ public abstract class Contract {
 	private int contractNo = -1;
 	private Date date;
 	private String place;
-	static int currentId = 0;
 	int id;
 	Person contractPartner;
-	
-	public Contract() {
-		this.id = currentId++;
-	}
 	
 	public int getContractNo() {
 		return contractNo;

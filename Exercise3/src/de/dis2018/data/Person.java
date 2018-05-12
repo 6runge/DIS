@@ -22,6 +22,7 @@ public class Person {
 	
 	public Person() {
 	}
+	
 	@Id
 	@GeneratedValue(generator="increment")
 	@GenericGenerator(name="increment", strategy = "increment")	

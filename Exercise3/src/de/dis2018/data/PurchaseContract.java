@@ -1,9 +1,14 @@
 package de.dis2018.data;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 import de.dis2018.util.Helper;
@@ -36,9 +41,10 @@ public class PurchaseContract extends Contract {
 	public void setIntrestRate(int intrestRate) {
 		this.intrestRate = intrestRate;
 	}
-	
-	@OneToOne
-	public House getHouse() {
+
+    @OneToOne
+    @JoinColumn(name = "house_id")
+    public House getHouse() {
 		return house;
 	}
 

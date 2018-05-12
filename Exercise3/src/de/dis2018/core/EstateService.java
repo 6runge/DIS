@@ -5,9 +5,13 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import javax.transaction.Transactional;
+
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.query.Query;
 
 import de.dis2018.data.House;
@@ -92,16 +96,14 @@ public class EstateService {
 	 * @return Person with ID or null
 	 */
 	public Person getPersonById(int id) {
-		Iterator<Person> it = persons.iterator();
-		
-		while(it.hasNext()) {
-			Person p = it.next();
-			
-			if(p.getId() == id)
-				return p;
-		}
-		
-		return null;
+		Session session = sessionFactory.openSession();
+		session.beginTransaction(); 
+		Query query = session.createQuery("FROM Person WHERE id = :id");
+		query.setParameter("id", id);
+		Person person = (Person) query.list().get(0);
+		session.getTransaction().commit();
+		session.close();
+		return person;
 	}
 	
 	/**
@@ -136,8 +138,7 @@ public class EstateService {
 		session.beginTransaction(); 
 		session.update(ea);
 		session.getTransaction().commit();
-		session.close();		
-		
+		session.close();			
 	}
 
 	/**
@@ -145,14 +146,33 @@ public class EstateService {
 	 * @param p The person
 	 */
 	public void addPerson(Person p) {
-		persons.add(p);
+		Session session = sessionFactory.openSession();
+		session.beginTransaction(); 
+		session.save(p);
+		session.getTransaction().commit();
+		session.close();
 	}
-	
+	/**
+	 * @param ea
+	 */
+	public void updatePerson(Person p) {
+		Session session = sessionFactory.openSession();
+		session.beginTransaction(); 
+		session.update(p);
+		session.getTransaction().commit();
+		session.close();			
+	}	
 	/**
 	 * Returns all persons
 	 */
 	public Set<Person> getAllPersons() {
-		return persons;
+		Session session = sessionFactory.openSession();
+		session.beginTransaction(); 
+		Query query = session.createQuery("FROM Person");
+		Set<Person> persons = new HashSet<Person>(query.list());
+		session.getTransaction().commit();
+		session.close();
+		return persons;	
 	}
 	
 	/**
@@ -160,7 +180,11 @@ public class EstateService {
 	 * @param p The person
 	 */
 	public void deletePerson(Person p) {
-		persons.remove(p);
+		Session session = sessionFactory.openSession();
+		session.beginTransaction(); 
+		session.delete(p);
+		session.getTransaction().commit();
+		session.close();	
 	}
 	
 	/**
@@ -168,26 +192,36 @@ public class EstateService {
 	 * @param h The house
 	 */
 	public void addHouse(House h) {
-		houses.add(h);
+		Session session = sessionFactory.openSession();
+		session.beginTransaction(); 
+		session.save(h);
+		session.getTransaction().commit();
+		session.close();
 	}
-	
+	/**
+	 * @param ea
+	 */
+	public void updateHouse(House h) {
+		Session session = sessionFactory.openSession();
+		session.beginTransaction(); 
+		session.update(h);
+		session.getTransaction().commit();
+		session.close();			
+	}	
 	/**
 	 * Returns all houses of an estate agent
 	 * @param ea the estate agent
 	 * @return All houses managed by the estate agent
 	 */
 	public Set<House> getAllHousesForEstateAgent(EstateAgent ea) {
-		Set<House> ret = new HashSet<House>();
-		Iterator<House> it = houses.iterator();
-		
-		while(it.hasNext()) {
-			House h = it.next();
-			
-			if(h.getManager().equals(ea))
-				ret.add(h);
-		}
-		
-		return ret;
+		Session session = sessionFactory.openSession();
+		session.beginTransaction(); 
+		Query query = session.createQuery("FROM House WHERE manager = :manager");
+		query.setParameter("manager", ea);
+		Set<House> hs = new HashSet<House>(query.list());
+		session.getTransaction().commit();
+		session.close();
+		return hs;	
 	}
 	
 	/**
@@ -196,16 +230,14 @@ public class EstateService {
 	 * @return The house or null if not found
 	 */
 	public House getHouseById(int id) {
-		Iterator<House> it = houses.iterator();
-		
-		while(it.hasNext()) {
-			House h = it.next();
-			
-			if(h.getId() == id)
-				return h;
-		}
-		
-		return null;
+		Session session = sessionFactory.openSession();
+		session.beginTransaction(); 
+		Query<House> query = session.createQuery("FROM House WHERE id = :id");
+		query.setParameter("id", id);
+		House h = (House) query.list().get(0);
+		session.getTransaction().commit();
+		session.close();
+		return h;
 	}
 	
 	/**
@@ -213,7 +245,11 @@ public class EstateService {
 	 * @param h The house
 	 */
 	public void deleteHouse(House h) {
-		houses.remove(h);
+		Session session = sessionFactory.openSession();
+		session.beginTransaction(); 
+		session.delete(h);
+		session.getTransaction().commit();
+		session.close();	
 	}
 	
 	/**
@@ -221,26 +257,36 @@ public class EstateService {
 	 * @param w the aparment
 	 */
 	public void addApartment(Apartment w) {
-		apartments.add(w);
+		Session session = sessionFactory.openSession();
+		session.beginTransaction(); 
+		session.save(w);
+		session.getTransaction().commit();
+		session.close();
 	}
-	
+	/**
+	 * @param ea
+	 */
+	public void updateApartment(Apartment w) {
+		Session session = sessionFactory.openSession();
+		session.beginTransaction(); 
+		session.update(w);
+		session.getTransaction().commit();
+		session.close();			
+	}	
 	/**
 	 * Returns all apartments of an estate agent
 	 * @param ea The estate agent
 	 * @return All apartments managed by the estate agent
 	 */
 	public Set<Apartment> getAllApartmentsForEstateAgent(EstateAgent ea) {
-		Set<Apartment> ret = new HashSet<Apartment>();
-		Iterator<Apartment> it = apartments.iterator();
-		
-		while(it.hasNext()) {
-			Apartment w = it.next();
-			
-			if(w.getManager().equals(ea))
-				ret.add(w);
-		}
-		
-		return ret;
+		Session session = sessionFactory.openSession();
+		session.beginTransaction(); 
+		Query query = session.createQuery("FROM Apartment WHERE manager = :manager");
+		query.setParameter("manager", ea);
+		Set<Apartment> ws = new HashSet<Apartment>(query.list());
+		session.getTransaction().commit();
+		session.close();
+		return ws;	
 	}
 	
 	/**
@@ -249,16 +295,14 @@ public class EstateService {
 	 * @return The apartment or zero, if not found
 	 */
 	public Apartment getApartmentByID(int id) {
-		Iterator<Apartment> it = apartments.iterator();
-		
-		while(it.hasNext()) {
-			Apartment w = it.next();
-			
-			if(w.getId() == id)
-				return w;
-		}
-		
-		return null;
+		Session session = sessionFactory.openSession();
+		session.beginTransaction(); 
+		Query query = session.createQuery("FROM Apartment WHERE id = :id");
+		query.setParameter("id", id);
+		Apartment w = (Apartment) query.list().get(0);
+		session.getTransaction().commit();
+		session.close();
+		return w;
 	}
 	
 	/**
@@ -266,7 +310,11 @@ public class EstateService {
 	 * @param p The apartment
 	 */
 	public void deleteApartment(Apartment w) {
-		apartments.remove(w);
+		Session session = sessionFactory.openSession();
+		session.beginTransaction(); 
+		session.delete(w);
+		session.getTransaction().commit();
+		session.close();	
 	}
 	
 	
@@ -275,7 +323,11 @@ public class EstateService {
 	 * @param t The tenancy contract
 	 */
 	public void addTenancyContract(TenancyContract t) {
-		tenancyContracts.add(t);
+		Session session = sessionFactory.openSession();
+		session.beginTransaction(); 
+		session.save(t);
+		session.getTransaction().commit();
+		session.close();
 	}
 	
 	/**
@@ -283,25 +335,46 @@ public class EstateService {
 	 * @param p The purchase contract
 	 */
 	public void addPurchaseContract(PurchaseContract p) {
-		purchaseContracts.add(p);
+		Session session = sessionFactory.openSession();
+		session.beginTransaction(); 
+		session.save(p);
+		session.getTransaction().commit();
+		session.close();
 	}
-	
+	/**
+	 * @param ea
+	 */
+	public void updateTenancyContract(TenancyContract tc) {
+		Session session = sessionFactory.openSession();
+		session.beginTransaction(); 
+		session.update(tc);
+		session.getTransaction().commit();
+		session.close();			
+	}
+	/**
+	 * @param ea
+	 */
+	public void updatePurchaseContract(PurchaseContract pc) {
+		Session session = sessionFactory.openSession();
+		session.beginTransaction(); 
+		session.update(pc);
+		session.getTransaction().commit();
+		session.close();			
+	}
 	/**
 	 * Finds a tenancy contract with a given ID
 	 * @param id Die ID
 	 * @return The tenancy contract or zero if not found
 	 */
 	public TenancyContract getTenancyContractByID(int id) {
-		Iterator<TenancyContract> it = tenancyContracts.iterator();
-		
-		while(it.hasNext()) {
-			TenancyContract m = it.next();
-			
-			if(m.getId() == id)
-				return m;
-		}
-		
-		return null;
+		Session session = sessionFactory.openSession();
+		session.beginTransaction(); 
+		Query query = session.createQuery("FROM TenancyContract WHERE id = :id");
+		query.setParameter("id", id);
+		TenancyContract tc = (TenancyContract) query.list().get(0);
+		session.getTransaction().commit();
+		session.close();
+		return tc;
 	}
 	
 	/**
@@ -310,16 +383,14 @@ public class EstateService {
 	 * @return The purchase contract or null if not found
 	 */
 	public PurchaseContract getPurchaseContractById(int id) {
-		Iterator<PurchaseContract> it = purchaseContracts.iterator();
-		
-		while(it.hasNext()) {
-			PurchaseContract k = it.next();
-			
-			if(k.getId() == id)
-				return k;
-		}
-		
-		return null;
+		Session session = sessionFactory.openSession();
+		session.beginTransaction(); 
+		Query query = session.createQuery("FROM PurchaseContract WHERE id = :id");
+		query.setParameter("id", id);
+		PurchaseContract pc = (PurchaseContract) query.list().get(0);
+		session.getTransaction().commit();
+		session.close();
+		return pc;
 	}
 	
 	/**
@@ -328,17 +399,14 @@ public class EstateService {
 	 * @return All contracts belonging to apartments managed by the estate agent
 	 */
 	public Set<TenancyContract> getAllTenancyContractsForEstateAgent(EstateAgent ea) {
-		Set<TenancyContract> ret = new HashSet<TenancyContract>();
-		Iterator<TenancyContract> it = tenancyContracts.iterator();
-		
-		while(it.hasNext()) {
-			TenancyContract v = it.next();
-			
-			if(v.getApartment().getManager().equals(ea))
-				ret.add(v);
-		}
-		
-		return ret;
+		Session session = sessionFactory.openSession();
+		session.beginTransaction(); 
+		Query query = session.createQuery("FROM TenancyContract AS tc WHERE tc.apartment.manager = :manager");
+		query.setParameter("manager", ea);
+		Set<TenancyContract> tcs = new HashSet<TenancyContract>(query.list());
+		session.getTransaction().commit();
+		session.close();
+		return tcs;	
 	}
 	
 	/**
@@ -347,17 +415,14 @@ public class EstateService {
 	 * @return All purchase contracts belonging to houses managed by the given estate agent
 	 */
 	public Set<PurchaseContract> getAllPurchaseContractsForEstateAgent(EstateAgent ea) {
-		Set<PurchaseContract> ret = new HashSet<PurchaseContract>();
-		Iterator<PurchaseContract> it = purchaseContracts.iterator();
-		
-		while(it.hasNext()) {
-			PurchaseContract k = it.next();
-			
-			if(k.getHouse().getManager().equals(ea))
-				ret.add(k);
-		}
-		
-		return ret;
+		Session session = sessionFactory.openSession();
+		session.beginTransaction(); 
+		Query query = session.createQuery("FROM PurchaseContract AS pc WHERE pc.house.manager = :manager");
+		query.setParameter("manager", ea);
+		Set<PurchaseContract> pcs = new HashSet<PurchaseContract>(query.list());
+		session.getTransaction().commit();
+		session.close();
+		return pcs;	
 	}
 	
 	/**
@@ -404,7 +469,11 @@ public class EstateService {
 	 * @param tc the tenancy contract
 	 */
 	public void deleteTenancyContract(TenancyContract tc) {
-		apartments.remove(tc);
+		Session session = sessionFactory.openSession();
+		session.beginTransaction(); 
+		session.delete(tc);
+		session.getTransaction().commit();
+		session.close();	
 	}
 	
 	/**
@@ -412,17 +481,18 @@ public class EstateService {
 	 * @param tc the purchase contract
 	 */
 	public void deletePurchaseContract(PurchaseContract pc) {
-		apartments.remove(pc);
+		Session session = sessionFactory.openSession();
+		session.beginTransaction(); 
+		session.delete(pc);
+		session.getTransaction().commit();
+		session.close();	
 	}
 	
 	/**
 	 * Adds some test data
 	 */
+	@Transactional
 	public void addTestData() {
-		//Hibernate Session erzeugen
-		Session session = sessionFactory.openSession();
-		
-		session.beginTransaction();
 		
 		EstateAgent m = new EstateAgent();
 		m.setName("Max Mustermann");
@@ -430,13 +500,8 @@ public class EstateService {
 		m.setLogin("max");
 		m.setPassword("max");
 		
-		//TODO: This estate agent is kept in memory and the DB
 		this.addEstateAgent(m);
-		session.save(m);
-		session.getTransaction().commit();
 
-		session.beginTransaction();
-		
 		Person p1 = new Person();
 		p1.setAddress("Informatikum");
 		p1.setName("Mustermann");
@@ -447,17 +512,10 @@ public class EstateService {
 		p2.setAddress("Reeperbahn 9");
 		p2.setName("Albers");
 		p2.setFirstname("Hans");
-		
-		session.save(p1);
-		session.save(p2);
-		
-		//TODO: These persons are kept in memory and the DB
+
 		this.addPerson(p1);
 		this.addPerson(p2);
-		session.getTransaction().commit();
-		
-		
-		session.beginTransaction();
+
 		House h = new House();
 		h.setCity("Hamburg");
 		h.setPostalcode(22527);
@@ -468,17 +526,11 @@ public class EstateService {
 		h.setPrice(10000000);
 		h.setGarden(true);
 		h.setManager(m);
-		
-		session.save(h);
-		
-		//TODO: This house is held in memory and the DB
+		System.out.println("id1 "+h.getId());
 		this.addHouse(h);
-		session.getTransaction().commit();
-		
-		// Create Hibernate Session
-		session = sessionFactory.openSession();
-		session.beginTransaction();
-		EstateAgent m2 = (EstateAgent)session.get(EstateAgent.class, m.getId());
+		System.out.println(h.getId());		
+		EstateAgent m2 = this.getEstateAgentByID(m.getId());
+		Hibernate.initialize(m2);
 		Set<Estate> immos = m2.getEstates();
 		Iterator<Estate> it = immos.iterator();
 		
@@ -486,7 +538,6 @@ public class EstateService {
 			Estate i = it.next();
 			System.out.println("Estate: "+i.getCity());
 		}
-		session.close();
 		
 		Apartment w = new Apartment();
 		w.setCity("Hamburg");
@@ -515,7 +566,7 @@ public class EstateService {
 		this.addApartment(w);
 		
 		PurchaseContract pc = new PurchaseContract();
-		pc.setHouse(h);
+		pc.setHouse(getHouseById(1));
 		pc.setContractPartner(p1);
 		pc.setContractNo(9234);
 		pc.setDate(new Date(System.currentTimeMillis()));
@@ -523,6 +574,7 @@ public class EstateService {
 		pc.setNoOfInstallments(5);
 		pc.setIntrestRate(4);
 		this.addPurchaseContract(pc);
+		System.out.println("idafterpc "+pc.getHouse().getId());
 		
 		TenancyContract tc = new TenancyContract();
 		tc.setApartment(w);

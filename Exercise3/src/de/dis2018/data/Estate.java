@@ -26,11 +26,6 @@ public abstract class Estate {
 	private String streetnumber;
 	private int squareArea;
 	private EstateAgent manager;
-	static int currentId = 0;
-	
-	public Estate() {
-		this.id = currentId++;
-	}
 	
 	@Id
 	@GeneratedValue(generator="increment")
@@ -78,7 +73,6 @@ public abstract class Estate {
 		this.squareArea = squareArea;
 	}
 	
-	@Column(name = "MANAGER")
 	public void setManager(EstateAgent manager) {
 		this.manager = manager;
 	}

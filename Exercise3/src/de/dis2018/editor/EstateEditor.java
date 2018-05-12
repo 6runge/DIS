@@ -151,6 +151,8 @@ public class EstateEditor {
 				h.setPrice(newPrice);
 			
 			h.setGarden(newGarden);
+			
+			service.updateHouse(h);
 		}
 	}
 	
@@ -247,6 +249,7 @@ public class EstateEditor {
 			
 			w.setKitchen(newEbk);
 			w.setBalcony(newBalcony);
+			service.updateApartment(w);
 		}
 	}
 	

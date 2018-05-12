@@ -37,35 +37,35 @@ public abstract class Estate {
 		this.id = id;
 	}
 
-	@Column(name = "CITY")
+
 	public String getCity() {
 		return city;
 	}
 	public void setCity(String city) {
 		this.city = city;
 	}
-	@Column(name = "POSTALCODE")
+
 	public int getPostalcode() {
 		return postalcode;
 	}
 	public void setPostalcode(int postalcode) {
 		this.postalcode = postalcode;
 	}
-	@Column(name = "STREET")
+
 	public String getStreet() {
 		return street;
 	}
 	public void setStreet(String street) {
 		this.street = street;
 	}
-	@Column(name = "STREETNO")
+
 	public String getStreetnumber() {
 		return streetnumber;
 	}
 	public void setStreetnumber(String streetnumber) {
 		this.streetnumber = streetnumber;
 	}
-	@Column(name = "SQUAREAREA")
+
 	public int getSquareArea() {
 		return squareArea;
 	}

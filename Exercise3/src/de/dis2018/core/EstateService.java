@@ -55,6 +55,9 @@ public class EstateService {
 		session.beginTransaction(); 
 		Query query = session.createQuery("FROM EstateAgent WHERE id = :id");
 		query.setParameter("id", id);
+		if (query.list().isEmpty()) {
+			return null;
+		}
 		EstateAgent agent = (EstateAgent) query.list().get(0);
 		session.getTransaction().commit();
 		session.close();
@@ -103,6 +106,9 @@ public class EstateService {
 		session.beginTransaction(); 
 		Query query = session.createQuery("FROM Person WHERE id = :id");
 		query.setParameter("id", id);
+		if (query.list().isEmpty()) {
+			return null;
+		}
 		Person person = (Person) query.list().get(0);
 		session.getTransaction().commit();
 		session.close();
@@ -237,6 +243,9 @@ public class EstateService {
 		session.beginTransaction(); 
 		Query<House> query = session.createQuery("FROM House WHERE id = :id");
 		query.setParameter("id", id);
+		if (query.list().isEmpty()) {
+			return null;
+		}
 		House h = (House) query.list().get(0);
 		session.getTransaction().commit();
 		session.close();
@@ -302,6 +311,9 @@ public class EstateService {
 		session.beginTransaction(); 
 		Query query = session.createQuery("FROM Apartment WHERE id = :id");
 		query.setParameter("id", id);
+		if (query.list().isEmpty()) {
+			return null;
+		}
 		Apartment w = (Apartment) query.list().get(0);
 		session.getTransaction().commit();
 		session.close();
@@ -375,6 +387,9 @@ public class EstateService {
 		session.beginTransaction(); 
 		Query query = session.createQuery("FROM TenancyContract WHERE id = :id");
 		query.setParameter("id", id);
+		if (query.list().isEmpty()) {
+			return null;
+		}
 		TenancyContract tc = (TenancyContract) query.list().get(0);
 		session.getTransaction().commit();
 		session.close();
@@ -391,6 +406,9 @@ public class EstateService {
 		session.beginTransaction(); 
 		Query query = session.createQuery("FROM PurchaseContract WHERE id = :id");
 		query.setParameter("id", id);
+		if (query.list().isEmpty()) {
+			return null;
+		}
 		PurchaseContract pc = (PurchaseContract) query.list().get(0);
 		session.getTransaction().commit();
 		session.close();

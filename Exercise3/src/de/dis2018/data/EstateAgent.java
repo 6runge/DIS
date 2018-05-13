@@ -12,6 +12,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Sort;
+import org.hibernate.annotations.SortType;
 
 import de.dis2018.util.Helper;
 
@@ -74,7 +76,8 @@ public class EstateAgent {
 		this.password = password;
 	}
 	
-	@OneToMany(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+	@OneToMany(mappedBy = "manager", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+	
 	public Set<Estate> getEstates() {
 		return estates;
 	}

@@ -31,12 +31,12 @@ import de.dis2018.data.Apartment;
  */
 public class EstateService {
 	//TODO All these sets should be commented out after successful implementation.
-	private Set<EstateAgent> estateAgents = new HashSet<EstateAgent>();
-	private Set<Person> persons = new HashSet<Person>();
-	private Set<House> houses = new HashSet<House>();
-	private Set<Apartment> apartments = new HashSet<Apartment>();
-	private Set<TenancyContract> tenancyContracts = new HashSet<TenancyContract>();
-	private Set<PurchaseContract> purchaseContracts = new HashSet<PurchaseContract>();
+//	private Set<EstateAgent> estateAgents = new HashSet<EstateAgent>();
+//	private Set<Person> persons = new HashSet<Person>();
+//	private Set<House> houses = new HashSet<House>();
+//	private Set<Apartment> apartments = new HashSet<Apartment>();
+//	private Set<TenancyContract> tenancyContracts = new HashSet<TenancyContract>();
+//	private Set<PurchaseContract> purchaseContracts = new HashSet<PurchaseContract>();
 	
 	//Hibernate Session
 	private SessionFactory sessionFactory;
@@ -71,6 +71,9 @@ public class EstateService {
 		session.beginTransaction(); 
 		Query query = session.createQuery("FROM EstateAgent WHERE login = :login");
 		query.setParameter("login", login);
+		if (query.list().isEmpty()) {
+			return null;
+		}
 		EstateAgent agent = (EstateAgent) query.list().get(0);
 		session.getTransaction().commit();
 		session.close();
@@ -311,7 +314,8 @@ public class EstateService {
 	 */
 	public void deleteApartment(Apartment w) {
 		Session session = sessionFactory.openSession();
-		session.beginTransaction(); 
+		session.beginTransaction();
+		session.detach(w);
 		session.delete(w);
 		session.getTransaction().commit();
 		session.close();	
@@ -430,38 +434,38 @@ public class EstateService {
 	 * @param ea The estate agent
 	 * @return set of tenancy contracts
 	 */
-	public Set<TenancyContract> getTenancyContractByEstateAgent(EstateAgent ea) {
-		Set<TenancyContract> ret = new HashSet<TenancyContract>();
-		Iterator<TenancyContract> it = tenancyContracts.iterator();
-		
-		while(it.hasNext()) {
-			TenancyContract mv = it.next();
-			
-			if(mv.getApartment().getManager().getId() == ea.getId())
-				ret.add(mv);
-		}
-		
-		return ret;
-	}
+//	public Set<TenancyContract> getTenancyContractByEstateAgent(EstateAgent ea) {
+//		Set<TenancyContract> ret = new HashSet<TenancyContract>();
+//		Iterator<TenancyContract> it = tenancyContracts.iterator();
+//		
+//		while(it.hasNext()) {
+//			TenancyContract mv = it.next();
+//			
+//			if(mv.getApartment().getManager().getId() == ea.getId())
+//				ret.add(mv);
+//		}
+//		
+//		return ret;
+//	}
 	
 	/**
 	 * Finds all purchase contracts relating to the houses of a given estate agent
 	 * @param  ea The estate agent
 	 * @return set of purchase contracts
 	 */
-	public Set<PurchaseContract> getPurchaseContractByEstateAgent(EstateAgent ea) {
-		Set<PurchaseContract> ret = new HashSet<PurchaseContract>();
-		Iterator<PurchaseContract> it = purchaseContracts.iterator();
-		
-		while(it.hasNext()) {
-			PurchaseContract k = it.next();
-			
-			if(k.getHouse().getManager().getId() == ea.getId())
-				ret.add(k);
-		}
-		
-		return ret;
-	}
+//	public Set<PurchaseContract> getPurchaseContractByEstateAgent(EstateAgent ea) {
+//		Set<PurchaseContract> ret = new HashSet<PurchaseContract>();
+//		Iterator<PurchaseContract> it = purchaseContracts.iterator();
+//		
+//		while(it.hasNext()) {
+//			PurchaseContract k = it.next();
+//			
+//			if(k.getHouse().getManager().getId() == ea.getId())
+//				ret.add(k);
+//		}
+//		
+//		return ret;
+//	}
 
 	
 	/**
@@ -529,15 +533,6 @@ public class EstateService {
 		System.out.println("id1 "+h.getId());
 		this.addHouse(h);
 		System.out.println(h.getId());		
-		EstateAgent m2 = this.getEstateAgentByID(m.getId());
-		Hibernate.initialize(m2);
-		Set<Estate> immos = m2.getEstates();
-		Iterator<Estate> it = immos.iterator();
-		
-		while(it.hasNext()) {
-			Estate i = it.next();
-			System.out.println("Estate: "+i.getCity());
-		}
 		
 		Apartment w = new Apartment();
 		w.setCity("Hamburg");
@@ -586,5 +581,20 @@ public class EstateService {
 		tc.setAdditionalCosts(65);
 		tc.setDuration(36);
 		this.addTenancyContract(tc);
+		
+		EstateAgent m2 = this.getEstateAgentByID(m.getId());
+		System.out.println(m.getId()+" "+m.getName());
+		
+		Hibernate.initialize(m2.getEstates());
+		if (m2.getEstates().isEmpty()) System.out.println("No Estates!");
+		System.out.println(m2.getEstates().size());
+		Set<Estate> immos = m2.getEstates();
+		Iterator<Estate> it = immos.iterator();
+		
+		while(it.hasNext()) {
+			Estate i = it.next();
+			System.out.println("Estate: "+i.getCity());
+		}		
+		
 	}
 }

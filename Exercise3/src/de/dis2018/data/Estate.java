@@ -8,6 +8,8 @@ import javax.persistence.Inheritance;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+
 import org.hibernate.annotations.GenericGenerator;
 
 import de.dis2018.util.Helper;

@@ -1,6 +1,7 @@
 package de.dis2018.data;
 
 import javax.persistence.Entity;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import de.dis2018.util.Helper;
@@ -17,7 +18,8 @@ public class Apartment extends Estate {
 	private int rooms;
 	private boolean balcony;
 	private boolean kitchen;
-	
+	private TenancyContract tc;
+		
 	
 	public Apartment() {
 		super();
@@ -54,6 +56,15 @@ public class Apartment extends Estate {
 		this.kitchen = kitchen;
 	}
 	
+	@OneToOne(mappedBy = "apartment", orphanRemoval=true)
+	public TenancyContract getTc() {
+		return tc;
+	}
+
+	public void setTc(TenancyContract tc) {
+		this.tc = tc;
+	}
+
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();

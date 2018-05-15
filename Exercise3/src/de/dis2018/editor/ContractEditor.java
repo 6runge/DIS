@@ -115,6 +115,13 @@ public class ContractEditor {
 		AppartmentSelectionMenu asm = new AppartmentSelectionMenu("Select apartment for contract", apartments);
 		int wid = asm.show();
 		
+		//check if apartment is rented out
+		while(rented(wid)) {
+			System.out.println("");
+			System.out.println("The chosen apartment has already been rented out. Select a different one!");
+			wid = asm.show();
+		}
+		
 		//If no abort: Selection of the person
 		if(wid != AppartmentSelectionMenu.BACK) {
 			//Load all persons
@@ -145,6 +152,24 @@ public class ContractEditor {
 	}
 	
 	/**
+	 * Checks if a tenancy contract for an apartment with the specified id exists.
+	 * @param apartmentId the id of the apartment
+	 * @return true if the apartment is not rented out
+	 */
+	private boolean rented(int apartmentId) {
+		return !(service.getTenancyContractByApartmentID(apartmentId) == null);
+	}
+	
+	/**
+	 * Checks if a house contract for a house with the specified id exists.
+	 * @param houseId the id of the house
+	 * @return true if the house has not been sold
+	 */
+	private boolean sold(int houseId) {
+		return !(service.getPurchaseContractByHouseId(houseId) == null);
+	}
+
+	/**
 	 * Menu for creating a new purchase contract
 	 */
 	public void newPurchaseContract() {
@@ -154,6 +179,13 @@ public class ContractEditor {
 		//Selection menu for the House
 		HouseSelectionMenu asm = new HouseSelectionMenu("Select house for contract.", houses);
 		int hid = asm.show();
+		
+		//check if house has already been sold
+		while (sold(hid)) {
+			System.out.println("");
+			System.out.println("The chosen house has already been sold. Select a different one!");
+			hid = asm.show();
+		}
 		
 		//If no abort: Selection of the person
 		if(hid != AppartmentSelectionMenu.BACK) {

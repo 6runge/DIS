@@ -379,13 +379,32 @@ public class EstateService {
 	}
 	/**
 	 * Finds a tenancy contract with a given ID
-	 * @param id Die ID
+	 * @param id the ID
 	 * @return The tenancy contract or zero if not found
 	 */
 	public TenancyContract getTenancyContractByID(int id) {
 		Session session = sessionFactory.openSession();
 		session.beginTransaction(); 
 		Query query = session.createQuery("FROM TenancyContract WHERE id = :id");
+		query.setParameter("id", id);
+		if (query.list().isEmpty()) {
+			return null;
+		}
+		TenancyContract tc = (TenancyContract) query.list().get(0);
+		session.getTransaction().commit();
+		session.close();
+		return tc;
+	}
+	
+	/**
+	 * Finds a tenancy contract with a given ApartmentID
+	 * @param id the apartment ID
+	 * @return The tenancy contract or zero if not found
+	 */
+	public TenancyContract getTenancyContractByApartmentID(int id) {
+		Session session = sessionFactory.openSession();
+		session.beginTransaction(); 
+		Query query = session.createQuery("FROM TenancyContract WHERE apartment_id = :id");
 		query.setParameter("id", id);
 		if (query.list().isEmpty()) {
 			return null;
@@ -405,6 +424,25 @@ public class EstateService {
 		Session session = sessionFactory.openSession();
 		session.beginTransaction(); 
 		Query query = session.createQuery("FROM PurchaseContract WHERE id = :id");
+		query.setParameter("id", id);
+		if (query.list().isEmpty()) {
+			return null;
+		}
+		PurchaseContract pc = (PurchaseContract) query.list().get(0);
+		session.getTransaction().commit();
+		session.close();
+		return pc;
+	}
+	
+	/**
+	 * Finds a purchase contract with a given HouseID
+	 * @param id The id of the house of the contract
+	 * @return The purchase contract or null if not found
+	 */
+	public PurchaseContract getPurchaseContractByHouseId(int id) {
+		Session session = sessionFactory.openSession();
+		session.beginTransaction(); 
+		Query query = session.createQuery("FROM PurchaseContract WHERE house_id = :id");
 		query.setParameter("id", id);
 		if (query.list().isEmpty()) {
 			return null;

@@ -63,7 +63,11 @@ public class EstateAgentEditor {
 		
 		m.setName(FormUtil.readString("Name"));
 		m.setAddress(FormUtil.readString("Address"));
-		m.setLogin(FormUtil.readString("Login"));
+		String login = FormUtil.readString("Login");
+		while (login.isEmpty() || loginUnavailable(login)) {
+			login = FormUtil.readString("Login unavailable. Select a new one");
+		}
+		m.setLogin(login);
 		m.setPassword(FormUtil.readString("Password"));
 		service.addEstateAgent(m);
 		
@@ -88,6 +92,9 @@ public class EstateAgentEditor {
 			String new_name = FormUtil.readString("Name ("+m.getName()+")");
 			String new_address = FormUtil.readString("Addresss ("+m.getAddress()+")");
 			String new_login = FormUtil.readString("Login ("+m.getLogin()+")");
+			while (loginUnavailable(new_login)) {
+				new_login = FormUtil.readString("Login unavailable. Select a new one");
+			}
 			String new_password = FormUtil.readString("Password ("+m.getPassword()+")");
 			
 			//Set new data
@@ -103,6 +110,10 @@ public class EstateAgentEditor {
 		}
 	}
 	
+	private boolean loginUnavailable(String login) {
+		return !(service.getEstateAgentByLogin(login) == null);
+	}
+
 	/**
 	 *  Deletes an estate agent after the user has selected it.
 	 */

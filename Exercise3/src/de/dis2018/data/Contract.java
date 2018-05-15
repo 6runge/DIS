@@ -23,7 +23,7 @@ public abstract class Contract {
 	private Date date;
 	private String place;
 	int id;
-	Person contractPartner;
+	private Person contractPartner;
 	
 	public int getContractNo() {
 		return contractNo;

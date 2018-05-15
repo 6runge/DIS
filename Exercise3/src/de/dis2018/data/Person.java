@@ -1,8 +1,13 @@
 package de.dis2018.data;
 
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -19,6 +24,8 @@ public class Person {
 	private String firstname;
 	private String name;
 	private String address;
+	private Set<TenancyContract> tenancyContracts; 
+	private Set<PurchaseContract> purchaseContracts; 
 	
 	public Person() {
 	}
@@ -50,7 +57,23 @@ public class Person {
 	public void setAddress(String address) {
 		this.address = address;
 	}
+	@OneToMany(mappedBy = "contractPartner", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+	public Set<TenancyContract> getTenancyContracts() {
+		return tenancyContracts;
+	}
+
+	public void setTenancyContracts(Set<TenancyContract> tenancyContracts) {
+		this.tenancyContracts = tenancyContracts;
+	}
+	@OneToMany(mappedBy = "contractPartner", cascade=CascadeType.ALL)
+	public Set<PurchaseContract> getPurchaseContracts() {
+		return purchaseContracts;
+	}
 	
+	public void setPurchaseContracts(Set<PurchaseContract> purchaseContracts) {
+		this.purchaseContracts = purchaseContracts;
+	}
+
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;

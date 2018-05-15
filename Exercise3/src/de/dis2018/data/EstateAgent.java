@@ -77,7 +77,6 @@ public class EstateAgent {
 	}
 	
 	@OneToMany(mappedBy = "manager", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
-	
 	public Set<Estate> getEstates() {
 		return estates;
 	}
